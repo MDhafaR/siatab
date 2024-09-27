@@ -20,11 +20,14 @@ class HomePageFull extends StatefulWidget {
 class _HomePageFullState extends State<HomePageFull> {
   bool isDrawerOpen = false;
   double _panelPosition = 0.0;
+  Position? _currentPosition;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     widget.advancedDrawerController.addListener(_handleDrawerChange);
+    _getCurrentPosition();
   }
 
   @override
@@ -38,6 +41,31 @@ class _HomePageFullState extends State<HomePageFull> {
       isDrawerOpen = widget.advancedDrawerController.value ==
           AdvancedDrawerValue.visible();
     });
+  }
+
+  Future<void> _getCurrentPosition() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final isLocationGranted = await Utility.instance.checkLocationPermission();
+    if (!isLocationGranted) {
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      setState(() {
+        _currentPosition = position;
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -63,6 +91,21 @@ class _HomePageFullState extends State<HomePageFull> {
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.technoinfinity.siatab',
                     ),
+                    MarkerLayer(markers: [
+                      if (_currentPosition != null) ...[
+                        Marker(
+                          rotate: true,
+                          height: 40,
+                          width: 40,
+                          point: LatLng(_currentPosition!.latitude,
+                              _currentPosition!.longitude),
+                          child: SvgPicture.asset(
+                            'assets/my_location.svg',
+                            width: 32.w,
+                          ),
+                        ),
+                      ],
+                    ])
                   ],
                 ),
                 SlidingUpPanel(
@@ -215,6 +258,15 @@ class _HomePageFullState extends State<HomePageFull> {
                     ],
                   ),
                 ),
+                if (_isLoading)
+                  Dialog(
+                    backgroundColor: Colors.transparent,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.primary,
+                      ),
+                    ),
+                  )
               ],
             ),
           ),

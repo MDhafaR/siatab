@@ -18,3 +18,4 @@ part 'list_legenda.dart';
 part 'dashline.dart';
 part 'dialog_widget.dart';
 part 'custom_app_bar.dart';
+part 'mata_air_card.dart';

@@ -39,6 +39,12 @@ class AppTheme {
       fontWeight: FontWeight.w500,
       letterSpacing: 0.2);
 
+  static TextStyle semiBold = TextStyle(
+      color: AppColor.white,
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0.2);
+
   static TextStyle logo = TextStyle(
     color: AppColor.primary,
     fontSize: 37.75.sp,

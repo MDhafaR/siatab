@@ -80,30 +80,51 @@ class _MataAirPageState extends State<MataAirPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                       child: Text(
                         "Input Data Mata Air",
                         style: AppTheme.caption2.copyWith(color: AppColor.dark),
                       )),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: AppColor.primary
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: AppColor.primary),
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.add,
+                          color: AppColor.white,
+                          size: 18,
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                        child: Row(children: [
-                          Icon(Icons.add, color: AppColor.white, size: 18,),
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          Text("Mata Air",style: AppTheme.medium.copyWith(color: AppColor.white),)
-                        ],),
-                      )
+                        SizedBox(
+                          width: 8.w,
+                        ),
+                        Text(
+                          "Mata Air",
+                          style:
+                              AppTheme.medium.copyWith(color: AppColor.white),
+                        )
+                      ],
+                    ),
+                  )
                 ],
               ),
               SizedBox(
                 height: 12.h,
               ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                  return MataAirCard(
+                      koordinat: "-7.193252111.193252111",
+                      operasi: "Operasi",
+                      manfaatJiwa: "Air Baku",
+                      manfaatIrigasi: "JIAT");
+                }),
+              )
             ],
           ),
         ));
