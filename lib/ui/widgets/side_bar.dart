@@ -58,7 +58,7 @@ class _SideBarState extends State<SideBar> {
                     onTap: () {
                       setState(() {
                         isPetaSebaran = true;
-                        widget.onTabChange('peta');
+                        widget.onTabChange('peta sebaran');
                       });
                     },
                     child: Container(
@@ -94,6 +94,12 @@ class _SideBarState extends State<SideBar> {
                       ),
                       const SizedBox(height: 14),
                       CustomListTile(
+                        onTap: () {
+                          setState(() {
+                            isPetaSebaran = false;
+                          });
+                          widget.onTabChange('sumur');
+                        },
                         svgTitle: "point",
                         title: "Sumur",
                       ),

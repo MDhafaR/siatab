@@ -20,5 +20,6 @@ part 'dashline.dart';
 part 'dialog_widget.dart';
 part 'custom_app_bar.dart';
 part 'mata_air_card.dart';
+part 'sumur_card.dart';
 part 'custom_form_field_widget.dart';
 part 'custom_dropdown_field_widget.dart';

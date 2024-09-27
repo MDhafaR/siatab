@@ -62,6 +62,12 @@ class _MainPageState extends State<MainPage> {
           currentTab: _currentTab,
           onTabChange: setTab,
         );
+      case 'sumur':
+        return SumurPage(
+          advancedDrawerController: _advancedDrawerController,
+          currentTab: _currentTab,
+          onTabChange: setTab,
+        );
       default:
         return LoginPage();
     }
