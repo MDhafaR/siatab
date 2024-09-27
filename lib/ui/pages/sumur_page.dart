@@ -3,12 +3,10 @@ part of 'pages.dart';
 class SumurPage extends StatefulWidget {
   const SumurPage(
       {required this.advancedDrawerController,
-      required this.currentTab,
       required this.onTabChange,
       super.key});
 
   final AdvancedDrawerController advancedDrawerController;
-  final String currentTab;
   final Function(String) onTabChange;
 
   @override

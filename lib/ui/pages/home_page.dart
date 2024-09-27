@@ -3,14 +3,12 @@ part of 'pages.dart';
 class HomePage extends StatefulWidget {
   HomePage({
     required this.advancedDrawerController,
-    required this.currentTab,
     required this.onTabChange,
     required this.mapController,
     super.key,
   });
 
   final AdvancedDrawerController advancedDrawerController;
-  final String currentTab;
   final Function(String) onTabChange;
   MapController mapController;
 

@@ -45,27 +45,23 @@ class _MainPageState extends State<MainPage> {
       case 'peta sebaran':
         return HomePage(
           advancedDrawerController: _advancedDrawerController,
-          currentTab: _currentTab,
           onTabChange: setTab,
           mapController: _mapController,
         );
       case 'peta sebaran full':
         return HomePageFull(
           advancedDrawerController: _advancedDrawerController,
-          currentTab: _currentTab,
           onTabChange: setTab,
           mapController: _mapController,
         );
       case 'mata air':
         return MataAirPage(
           advancedDrawerController: _advancedDrawerController,
-          currentTab: _currentTab,
           onTabChange: setTab,
         );
       case 'sumur':
         return SumurPage(
           advancedDrawerController: _advancedDrawerController,
-          currentTab: _currentTab,
           onTabChange: setTab,
         );
       default:

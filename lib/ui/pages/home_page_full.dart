@@ -3,13 +3,11 @@ part of 'pages.dart';
 class HomePageFull extends StatefulWidget {
   HomePageFull(
       {required this.advancedDrawerController,
-      required this.currentTab,
       required this.onTabChange,
       required this.mapController,
       super.key});
 
   final AdvancedDrawerController advancedDrawerController;
-  final String currentTab;
   final Function(String) onTabChange;
   MapController mapController;
 
