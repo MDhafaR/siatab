@@ -10,17 +10,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final Function()? tapLeading;
 
-  CustomAppBar({
-    Key? key, 
-    required this.title, 
-    this.foregroundColor, 
-    this.startColor, 
-    this.endColor,
-    this.backgroundColor,
-    this.customColor,
-    this.leading,
-    this.tapLeading
-  }) : super(key: key);
+  CustomAppBar(
+      {Key? key,
+      required this.title,
+      this.foregroundColor,
+      this.startColor,
+      this.endColor,
+      this.backgroundColor,
+      this.customColor,
+      this.leading,
+      this.tapLeading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +45,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         title: title,
         centerTitle: true,
-        backgroundColor: customColor != null ? backgroundColor ?? Colors.transparent : Colors.white,
-        surfaceTintColor: customColor != null ? Colors.transparent : Colors.white,
+        backgroundColor: customColor != null
+            ? backgroundColor ?? Colors.transparent
+            : Colors.white,
+        surfaceTintColor:
+            customColor != null ? Colors.transparent : Colors.white,
         elevation: 0,
         foregroundColor: foregroundColor ?? Colors.black,
         leading: IconButton(
+          iconSize: 24,
           padding: const EdgeInsets.all(0),
-          onPressed: tapLeading,
-          icon: leading ?? Container(),
+          onPressed: tapLeading ??
+              () {
+                Get.back();
+              },
+          icon: leading ??
+              Icon(
+                Icons.arrow_back,
+                color: AppColor.primary,
+              ),
         ),
       ),
     );

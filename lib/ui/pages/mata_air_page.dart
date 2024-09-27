@@ -39,6 +39,7 @@ class _MataAirPageState extends State<MataAirPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColor.grey,
         appBar: CustomAppBar(
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -70,10 +71,8 @@ class _MataAirPageState extends State<MataAirPage> {
             widget.advancedDrawerController.showDrawer();
           },
         ),
-        body: Container(
-          width: MediaQuery.of(context).size.width,
+        body: Padding(
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-          color: AppColor.grey,
           child: Column(
             children: [
               Row(
@@ -86,27 +85,32 @@ class _MataAirPageState extends State<MataAirPage> {
                         "Input Data Mata Air",
                         style: AppTheme.caption2.copyWith(color: AppColor.dark),
                       )),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: AppColor.primary),
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.add,
-                          color: AppColor.white,
-                          size: 18,
-                        ),
-                        SizedBox(
-                          width: 8.w,
-                        ),
-                        Text(
-                          "Mata Air",
-                          style:
-                              AppTheme.medium.copyWith(color: AppColor.white),
-                        )
-                      ],
+                  InkWell(
+                    onTap: () {
+                      Get.to(() => const MataAirRequest());
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: AppColor.primary),
+                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.add,
+                            color: AppColor.white,
+                            size: 18,
+                          ),
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          Text(
+                            "Mata Air",
+                            style:
+                                AppTheme.medium.copyWith(color: AppColor.white),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
