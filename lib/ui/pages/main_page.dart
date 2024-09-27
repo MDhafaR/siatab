@@ -40,6 +40,13 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  void _closeDrawer() {
+    _advancedDrawerController.hideDrawer();
+    setState(() {
+      isDrawerOpen = false;
+    });
+  }
+
   Widget _page() {
     switch (_currentTab) {
       case 'peta sebaran':
@@ -86,6 +93,7 @@ class _MainPageState extends State<MainPage> {
           onTabChange: setTab,
           currentTab: _currentTab,
           advancedDrawerController: _advancedDrawerController,
+          closeDrawer: _closeDrawer,
         ),
         child: _page());
   }

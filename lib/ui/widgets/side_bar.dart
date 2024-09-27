@@ -6,11 +6,13 @@ class SideBar extends StatefulWidget {
     required this.advancedDrawerController,
     required this.currentTab,
     required this.onTabChange,
+    required this.closeDrawer,
   });
 
   final AdvancedDrawerController advancedDrawerController;
   final String currentTab;
   final Function(String) onTabChange;
+  final Function() closeDrawer;
 
   @override
   State<SideBar> createState() => _SideBarState();
@@ -59,6 +61,7 @@ class _SideBarState extends State<SideBar> {
                       setState(() {
                         isPetaSebaran = true;
                         widget.onTabChange('peta sebaran');
+                        widget.closeDrawer();
                       });
                     },
                     child: Container(
@@ -88,6 +91,7 @@ class _SideBarState extends State<SideBar> {
                             isPetaSebaran = false;
                           });
                           widget.onTabChange('mata air');
+                        widget.closeDrawer();
                         },
                         svgTitle: "point",
                         title: "Mata Air",
@@ -99,6 +103,7 @@ class _SideBarState extends State<SideBar> {
                             isPetaSebaran = false;
                           });
                           widget.onTabChange('sumur');
+                        widget.closeDrawer();
                         },
                         svgTitle: "point",
                         title: "Sumur",

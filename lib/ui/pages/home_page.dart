@@ -136,14 +136,19 @@ class _HomePageState extends State<HomePage> {
                             height: 50,
                             width: 50,
                             point: const LatLng(-6.9481298, 107.6595104),
-                            child: IconButton(
-                              onPressed: () {
-                                showCustomDialog(context);
+                            child: ValueListenableBuilder(
+                              valueListenable: dialogOpenNotifier,
+                              builder: (context, isDialogOpen, _) {
+                                return IconButton(
+                                  onPressed: isDialogOpen
+                                      ? null
+                                      : () => showCustomDialog(context),
+                                  icon: SvgPicture.asset(
+                                    'assets/intake_sungai_non_aktif.svg',
+                                    width: 32.w,
+                                  ),
+                                );
                               },
-                              icon: SvgPicture.asset(
-                                'assets/intake_sungai_non_aktif.svg',
-                                width: 32.w,
-                              ),
                             ),
                           ),
                           if (_currentPosition != null) ...[
@@ -182,58 +187,66 @@ class _HomePageState extends State<HomePage> {
                       maxHeight: size.height * 0.45,
                     ),
                     Positioned(
-                      left: 9,
-                      bottom: size.height * (0.45 - 0.07) * _panelPosition +
-                          size.height * 0.07 +
-                          10,
-                      child: IntrinsicWidth(
-                        child: ClipRRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                            child: Container(
-                              padding: EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: AppColor.white),
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: AppColor.white.withOpacity(0.7)),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Legenda",
-                                    style: AppTheme.caption4,
+                        left: 9,
+                        bottom: size.height * (0.45 - 0.07) * _panelPosition +
+                            size.height * 0.07 +
+                            10,
+                        child: ValueListenableBuilder(
+                          valueListenable: dialogOpenNotifier,
+                          builder: (context, isDialogOpen, _) {
+                            if (isDialogOpen) return SizedBox();
+                            return IntrinsicWidth(
+                              child: ClipRRect(
+                                child: BackdropFilter(
+                                  filter:
+                                      ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: AppColor.white),
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: AppColor.white.withOpacity(0.4)),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Legenda",
+                                          style: AppTheme.caption4,
+                                        ),
+                                        SizedBox(
+                                          height: 7.h,
+                                        ),
+                                        DashLine(
+                                          ketebalan: 1,
+                                          warna: AppColor.superLight,
+                                          jarakAntarGaris: 3,
+                                          panjangGaris: 7,
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        ListLegenda(
+                                          svgTitle: 'intake_sungai_aktif',
+                                          title: 'Intake Sungai Aktif',
+                                        ),
+                                        SizedBox(
+                                          height: 10.h,
+                                        ),
+                                        ListLegenda(
+                                          svgTitle: 'intake_sungai_non_aktif',
+                                          title: 'Intake Sungai Non Aktif',
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: 7.h,
-                                  ),
-                                  DashLine(
-                                    ketebalan: 1,
-                                    warna: AppColor.superLight,
-                                    jarakAntarGaris: 3,
-                                    panjangGaris: 7,
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  ListLegenda(
-                                    svgTitle: 'intake_sungai_aktif',
-                                    title: 'Intake Sungai Aktif',
-                                  ),
-                                  SizedBox(
-                                    height: 10.h,
-                                  ),
-                                  ListLegenda(
-                                    svgTitle: 'intake_sungai_non_aktif',
-                                    title: 'Intake Sungai Non Aktif',
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                            );
+                          },
+                        )),
                     Align(
                       alignment: Alignment.topRight,
                       child: Container(

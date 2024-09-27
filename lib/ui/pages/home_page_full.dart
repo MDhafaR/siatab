@@ -139,7 +139,7 @@ class _HomePageFullState extends State<HomePageFull> {
                           decoration: BoxDecoration(
                               border: Border.all(color: AppColor.white),
                               borderRadius: BorderRadius.circular(12),
-                              color: AppColor.white.withOpacity(0.7)),
+                              color: AppColor.white.withOpacity(0.4)),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,

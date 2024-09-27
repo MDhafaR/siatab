@@ -516,14 +516,24 @@ class FromToIcon extends StatelessWidget {
   }
 }
 
+final dialogOpenNotifier = ValueNotifier<bool>(false);
+
 void showCustomDialog(BuildContext context) {
+  if (dialogOpenNotifier.value) return;  // Jika dialog sudah terbuka, jangan buka lagi
+
+  dialogOpenNotifier.value = true;
+  
   showDialog(
     context: context,
     barrierDismissible: true,
     barrierColor: AppColor.transparent,
     builder: (BuildContext context) {
       return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 42), child: DialogWidget());
+        padding: EdgeInsets.symmetric(horizontal: 42),
+        child: DialogWidget(),
+      );
     },
-  );
+  ).then((_) {
+    dialogOpenNotifier.value = false;
+  });
 }
