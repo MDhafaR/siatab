@@ -18,7 +18,6 @@ class _MainPageState extends State<MainPage> {
       _currentTab = newTab;
     });
   }
-  
 
   @override
   void initState() {
@@ -54,12 +53,14 @@ class _MainPageState extends State<MainPage> {
           advancedDrawerController: _advancedDrawerController,
           onTabChange: setTab,
           mapController: _mapController,
+          markers: _createMarkers(),
         );
       case 'peta sebaran full':
         return HomePageFull(
           advancedDrawerController: _advancedDrawerController,
           onTabChange: setTab,
           mapController: _mapController,
+          markers: _createMarkers(),
         );
       case 'mata air':
         return MataAirPage(
@@ -74,6 +75,38 @@ class _MainPageState extends State<MainPage> {
       default:
         return LoginPage();
     }
+  }
+
+  List<LatLng> dummyLocations = [
+    LatLng(-6.9481298, 107.6595104), // Titik pusat
+    LatLng(-6.9390298, 107.6686104), // Sekitar 1.5 km ke timur laut
+    LatLng(-6.9572298, 107.6504104), // Sekitar 1.5 km ke barat daya
+    LatLng(-6.9346298, 107.6595104), // Sekitar 1.5 km ke utara
+    LatLng(-6.9616298, 107.6595104), // Sekitar 1.5 km ke selatan
+  ];
+
+  List<Marker> _createMarkers() {
+    return dummyLocations
+        .map((latLng) => Marker(
+              rotate: true,
+              height: 50,
+              width: 50,
+              point: latLng,
+              child: ValueListenableBuilder(
+                valueListenable: dialogOpenNotifier,
+                builder: (context, isDialogOpen, _) {
+                  return IconButton(
+                    onPressed:
+                        isDialogOpen ? null : () => showCustomDialog(context),
+                    icon: SvgPicture.asset(
+                      'assets/intake_sungai_non_aktif.svg',
+                      width: 32.w,
+                    ),
+                  );
+                },
+              ),
+            ))
+        .toList();
   }
 
   @override

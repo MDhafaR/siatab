@@ -5,12 +5,14 @@ class HomePage extends StatefulWidget {
     required this.advancedDrawerController,
     required this.onTabChange,
     required this.mapController,
+    required this.markers,
     super.key,
   });
 
   final AdvancedDrawerController advancedDrawerController;
   final Function(String) onTabChange;
   MapController mapController;
+  final List<Marker> markers;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -64,6 +66,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoading = false;
       });
+      print("ini po banyak marker ${widget.markers.length}");
     }
   }
 
@@ -131,26 +134,7 @@ class _HomePageState extends State<HomePage> {
                           userAgentPackageName: 'com.technoinfinity.siatab',
                         ),
                         MarkerLayer(markers: [
-                          Marker(
-                            rotate: true,
-                            height: 50,
-                            width: 50,
-                            point: const LatLng(-6.9481298, 107.6595104),
-                            child: ValueListenableBuilder(
-                              valueListenable: dialogOpenNotifier,
-                              builder: (context, isDialogOpen, _) {
-                                return IconButton(
-                                  onPressed: isDialogOpen
-                                      ? null
-                                      : () => showCustomDialog(context),
-                                  icon: SvgPicture.asset(
-                                    'assets/intake_sungai_non_aktif.svg',
-                                    width: 32.w,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                          ...widget.markers,
                           if (_currentPosition != null) ...[
                             Marker(
                               rotate: true,

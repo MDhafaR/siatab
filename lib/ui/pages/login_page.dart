@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     final topHeight = MediaQuery.of(context).padding.top;
     final bottomHeight = MediaQuery.of(context).padding.bottom;
     return Scaffold(
+      backgroundColor: AppColor.primary,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
