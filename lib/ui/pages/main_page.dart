@@ -12,6 +12,20 @@ class _MainPageState extends State<MainPage> {
   bool isDrawerOpen = false;
   String _currentTab = 'peta sebaran';
   late MapController _mapController;
+  List<LatLng> _routePoints = [];
+  Position? _currentPosition;
+  bool _isLoading = false;
+
+  // untuk pengecekan apakah routenya sama dengan sebelumnya atau tidak
+  List<LatLng> _currentRoutePoints = []; 
+  double? _currentEndLatitude; 
+  double? _currentEndLongitude;
+
+  void _setLoading(bool loading) {
+    setState(() {
+      _isLoading = loading;
+    });
+  }
 
   void setTab(String newTab) {
     setState(() {
@@ -23,8 +37,76 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     _mapController = MapController();
     _advancedDrawerController.addListener(_handleDrawerChange);
+    _getCurrentPosition();
     super.initState();
   }
+
+  Future<void> _getCurrentPosition() async {
+    _setLoading(true);
+    final isLocationGranted = await Utility.instance.checkLocationPermission();
+    if (!isLocationGranted) {
+      _setLoading(false);
+      return;
+    }
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      setState(() {
+        _currentPosition = position;
+      });
+      await _getRoute(_currentPosition!, null, null);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      _setLoading(false);
+    }
+  }
+
+  Future<void> _getRoute(
+    Position start, double? endLatitude, double? endLongitude) async {
+  if (endLatitude == _currentEndLatitude && 
+      endLongitude == _currentEndLongitude &&
+      _currentRoutePoints.isNotEmpty) {
+    setState(() {
+      _routePoints = _currentRoutePoints;
+    });
+    return;
+  }
+
+  setState(() {
+    _isLoading = true;
+  });
+
+  try {
+    final OpenRouteService client = OpenRouteService(
+      apiKey: '5b3ce3597851110001cf6248387193944b4147e28f526f7e9b949e63',
+    );
+    final List<ORSCoordinate> routeCoordinates =
+        await client.directionsRouteCoordsGet(
+      startCoordinate:
+          ORSCoordinate(latitude: start.latitude, longitude: start.longitude),
+      endCoordinate: ORSCoordinate(
+          latitude: endLatitude ?? start.latitude,
+          longitude: endLongitude ?? start.longitude),
+    );
+    final List<LatLng> routePoints = routeCoordinates
+        .map(
+            (coordinate) => LatLng(coordinate.latitude, coordinate.longitude))
+        .toList();
+
+    setState(() {
+      _routePoints = routePoints;
+      _currentRoutePoints = routePoints;
+      _currentEndLatitude = endLatitude;
+      _currentEndLongitude = endLongitude;
+    });
+  } catch (e) {
+    debugPrint('Error getting route: ${e.toString()}');
+  } finally {
+    setState(() {
+      _isLoading = false;
+    });
+  }
+}
 
   @override
   void dispose() {
@@ -54,6 +136,10 @@ class _MainPageState extends State<MainPage> {
           onTabChange: setTab,
           mapController: _mapController,
           markers: _createMarkers(),
+          routePoints: _routePoints,
+          currentPosition: _currentPosition,
+          currentLoading: _isLoading,
+          setCurrentLoading: _setLoading,
         );
       case 'peta sebaran full':
         return HomePageFull(
@@ -61,6 +147,10 @@ class _MainPageState extends State<MainPage> {
           onTabChange: setTab,
           mapController: _mapController,
           markers: _createMarkers(),
+          routePoints: _routePoints,
+          currentPosition: _currentPosition,
+          currentLoading: _isLoading,
+          setCurrentLoading: _setLoading,
         );
       case 'mata air':
         return MataAirPage(
@@ -96,8 +186,15 @@ class _MainPageState extends State<MainPage> {
                 valueListenable: dialogOpenNotifier,
                 builder: (context, isDialogOpen, _) {
                   return IconButton(
-                    onPressed:
-                        isDialogOpen ? null : () => showCustomDialog(context),
+                    onPressed: isDialogOpen
+                        ? null
+                        : () {
+                            showCustomDialog(context);
+                            setState(() {
+                              _getRoute(_currentPosition!, latLng.latitude,
+                                  latLng.longitude);
+                            });
+                          },
                     icon: SvgPicture.asset(
                       'assets/intake_sungai_non_aktif.svg',
                       width: 32.w,

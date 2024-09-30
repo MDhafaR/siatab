@@ -6,6 +6,10 @@ class HomePage extends StatefulWidget {
     required this.onTabChange,
     required this.mapController,
     required this.markers,
+    required this.routePoints,
+    required this.currentPosition,
+    this.currentLoading,
+    this.setCurrentLoading,
     super.key,
   });
 
@@ -13,6 +17,10 @@ class HomePage extends StatefulWidget {
   final Function(String) onTabChange;
   MapController mapController;
   final List<Marker> markers;
+  List<LatLng> routePoints;
+  final Position? currentPosition;
+  bool? currentLoading;
+  Function(bool)? setCurrentLoading;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -21,14 +29,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isDrawerOpen = false;
   double _panelPosition = 0.0;
-  Position? _currentPosition;
-  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     widget.advancedDrawerController.addListener(_handleDrawerChange);
-    _getCurrentPosition();
   }
 
   @override
@@ -42,32 +47,6 @@ class _HomePageState extends State<HomePage> {
       isDrawerOpen = widget.advancedDrawerController.value ==
           AdvancedDrawerValue.visible();
     });
-  }
-
-  Future<void> _getCurrentPosition() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final isLocationGranted = await Utility.instance.checkLocationPermission();
-    if (!isLocationGranted) {
-      setState(() {
-        _isLoading = false;
-      });
-      return;
-    }
-    try {
-      Position position = await Geolocator.getCurrentPosition();
-      setState(() {
-        _currentPosition = position;
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-      print("ini po banyak marker ${widget.markers.length}");
-    }
   }
 
   @override
@@ -133,22 +112,31 @@ class _HomePageState extends State<HomePage> {
                               'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                           userAgentPackageName: 'com.technoinfinity.siatab',
                         ),
+                        PolylineLayer(
+                          polylines: [
+                            Polyline(
+                              points: widget.routePoints,
+                              color: AppColor.primary, // Asumsi ColorsLib.hijau adalah warna hijau
+                              strokeWidth: 5,
+                            ),
+                          ],
+                        ),
                         MarkerLayer(markers: [
                           ...widget.markers,
-                          if (_currentPosition != null) ...[
+                          if (widget.currentPosition != null) ...[
                             Marker(
                               rotate: true,
                               height: 40,
                               width: 40,
-                              point: LatLng(_currentPosition!.latitude,
-                                  _currentPosition!.longitude),
+                              point: LatLng(widget.currentPosition!.latitude,
+                                  widget.currentPosition!.longitude),
                               child: SvgPicture.asset(
                                 'assets/my_location.svg',
                                 width: 32.w,
                               ),
                             ),
                           ],
-                        ])
+                        ]),
                       ],
                     ),
                     SlidingUpPanel(
@@ -249,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                             child: SvgPicture.asset("assets/maximize.svg")),
                       ),
                     ),
-                    if (_isLoading)
+                    if (widget.currentLoading == true)
                       Dialog(
                         backgroundColor: Colors.transparent,
                         child: Center(
