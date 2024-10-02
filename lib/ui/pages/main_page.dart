@@ -17,8 +17,8 @@ class _MainPageState extends State<MainPage> {
   bool _isLoading = false;
 
   // untuk pengecekan apakah routenya sama dengan sebelumnya atau tidak
-  List<LatLng> _currentRoutePoints = []; 
-  double? _currentEndLatitude; 
+  List<LatLng> _currentRoutePoints = [];
+  double? _currentEndLatitude;
   double? _currentEndLongitude;
 
   void _setLoading(bool loading) {
@@ -62,51 +62,59 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> _getRoute(
-    Position start, double? endLatitude, double? endLongitude) async {
-  if (endLatitude == _currentEndLatitude && 
-      endLongitude == _currentEndLongitude &&
-      _currentRoutePoints.isNotEmpty) {
+      Position start, double? endLatitude, double? endLongitude) async {
+    if (endLatitude == _currentEndLatitude &&
+        endLongitude == _currentEndLongitude &&
+        _currentRoutePoints.isNotEmpty) {
+      setState(() {
+        _routePoints = _currentRoutePoints;
+      });
+      LatLngBounds bounds = LatLngBounds.fromPoints(
+          _createMarkers().map((marker) => marker.point).toList());
+      _mapController.fitCamera(CameraFit.bounds(
+          bounds: bounds,));
+      return;
+    }
+
     setState(() {
-      _routePoints = _currentRoutePoints;
+      _isLoading = true;
     });
-    return;
+
+    try {
+      final OpenRouteService client = OpenRouteService(
+        apiKey: '5b3ce3597851110001cf6248387193944b4147e28f526f7e9b949e63',
+      );
+      final List<ORSCoordinate> routeCoordinates =
+          await client.directionsRouteCoordsGet(
+        startCoordinate:
+            ORSCoordinate(latitude: start.latitude, longitude: start.longitude),
+        endCoordinate: ORSCoordinate(
+            latitude: endLatitude ?? start.latitude,
+            longitude: endLongitude ?? start.longitude),
+      );
+      final List<LatLng> routePoints = routeCoordinates
+          .map(
+              (coordinate) => LatLng(coordinate.latitude, coordinate.longitude))
+          .toList();
+
+      setState(() {
+        _routePoints = routePoints;
+        _currentRoutePoints = routePoints;
+        _currentEndLatitude = endLatitude;
+        _currentEndLongitude = endLongitude;
+      });
+    } catch (e) {
+      debugPrint('Error getting route: ${e.toString()}');
+    } finally {
+      setState(() {
+        LatLngBounds bounds = LatLngBounds.fromPoints(
+          _createMarkers().map((marker) => marker.point).toList());
+      _mapController.fitCamera(CameraFit.bounds(
+          bounds: bounds,));
+        _isLoading = false;
+      });
+    }
   }
-
-  setState(() {
-    _isLoading = true;
-  });
-
-  try {
-    final OpenRouteService client = OpenRouteService(
-      apiKey: '5b3ce3597851110001cf6248387193944b4147e28f526f7e9b949e63',
-    );
-    final List<ORSCoordinate> routeCoordinates =
-        await client.directionsRouteCoordsGet(
-      startCoordinate:
-          ORSCoordinate(latitude: start.latitude, longitude: start.longitude),
-      endCoordinate: ORSCoordinate(
-          latitude: endLatitude ?? start.latitude,
-          longitude: endLongitude ?? start.longitude),
-    );
-    final List<LatLng> routePoints = routeCoordinates
-        .map(
-            (coordinate) => LatLng(coordinate.latitude, coordinate.longitude))
-        .toList();
-
-    setState(() {
-      _routePoints = routePoints;
-      _currentRoutePoints = routePoints;
-      _currentEndLatitude = endLatitude;
-      _currentEndLongitude = endLongitude;
-    });
-  } catch (e) {
-    debugPrint('Error getting route: ${e.toString()}');
-  } finally {
-    setState(() {
-      _isLoading = false;
-    });
-  }
-}
 
   @override
   void dispose() {
