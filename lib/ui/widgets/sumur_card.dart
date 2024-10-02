@@ -55,127 +55,84 @@ class SumurCard extends StatelessWidget {
                 crossAxisSpacing: 12,
                 childAspectRatio: 2.2,
                 children: [
+                  ValueCard(
+                      title: "Nama/No Sumur",
+                      value: "Sumur SMAN 4 Bandung timur "),
+                  ValueCard(title: "Kode Integrasi", value: "SMR234"),
+                  ValueCard(title: "Kota", value: "Bandung"),
+                  ValueCard(
+                      title: "Provinsi Jawa Barat", value: "Potensi Bencana"),
+                  ValueCard(title: "Manfaat Jiwa", value: manfaatJiwa),
+                  ValueCard(
+                      title: "Manfaat Luas Daerah Irigasi",
+                      value: manfaatIrigasi),
+                  ValueCard(title: "Debit", value: "$debit"),
+                  ValueCard(title: "Kondisi Sumur", value: kondisiSumur),
+                  ValueCard(title: "Fungsi Sumur", value: fungsiSumur),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Koordinat",
-                        style: AppTheme.caption2.copyWith(color: AppColor.dark),
-                      ),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        "$latitude, $longitude",
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Fungsi Sumur",
-                        style: AppTheme.caption2.copyWith(color: AppColor.dark),
-                      ),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        fungsiSumur,
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Manfaat Jiwa",
+                      Text("Operasi",
                           style:
                               AppTheme.caption2.copyWith(color: AppColor.dark)),
                       SizedBox(
                         height: 4.h,
                       ),
-                      Text(
-                        manfaatJiwa,
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Manfaat Luas Daerah Irigasi",
-                          style:
-                              AppTheme.caption2.copyWith(color: AppColor.dark)),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        manfaatIrigasi,
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Debit",
-                          style:
-                              AppTheme.caption2.copyWith(color: AppColor.dark)),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        "$debit",
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Kondisi Sumur",
-                          style:
-                              AppTheme.caption2.copyWith(color: AppColor.dark)),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        kondisiSumur,
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: operasi == 'Operasi'
+                                ? AppColor.green
+                                : AppColor.danger),
+                        child: Text(
+                          operasi,
+                          style: AppTheme.semiBold,
+                        ),
+                      )
                     ],
                   ),
                 ]),
             Divider(),
             SizedBox(
-              height: 16.h,
+              height: 8.h,
             ),
-            Row(children: [
-              Expanded(
-                  child: Text("Status Operasi",
-                      style: AppTheme.caption2.copyWith(color: AppColor.dark))),
-              Flexible(
-                  child: Container(
-                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 6.5, horizontal: 12),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: operasi == 'Operasi'
-                        ? AppColor.green
-                        : AppColor.danger),
-                child: Text(
-                  operasi,
-                  style: AppTheme.semiBold,
+                  borderRadius: BorderRadius.circular(4),
+                  color: AppColor.primary
                 ),
-              ))
-            ])
+                child: Row(children: [
+                  SvgPicture.asset("assets/paper.svg", width: 18,),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Text("Detail Data", style: AppTheme.caption2.copyWith(color: AppColor.white),)
+                ],),
+              ),
+              SizedBox(
+                width: 8.w,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 6.5, horizontal: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: AppColor.green
+                ),
+                child: Row(children: [
+                  SvgPicture.asset("assets/book_map.svg", width: 18,),
+                  SizedBox(
+                    width: 8.w,
+                  ),
+                  Text("Koordinat Lokasi", style: AppTheme.caption2.copyWith(color: AppColor.white),)
+                ],),
+              ),
+            ],)
           ],
         ),
       ),

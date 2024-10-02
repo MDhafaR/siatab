@@ -32,7 +32,8 @@ class _SumurPageState extends State<SumurPage> {
 
   void _handleDrawerChange() {
     setState(() {
-      isDrawerOpen = widget.advancedDrawerController.value == AdvancedDrawerValue.visible();
+      isDrawerOpen = widget.advancedDrawerController.value ==
+          AdvancedDrawerValue.visible();
     });
   }
 
@@ -90,14 +91,16 @@ class _SumurPageState extends State<SumurPage> {
                         borderRadius: BorderRadius.circular(4),
                         color: AppColor.primary,
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                       child: Row(
                         children: [
                           Icon(Icons.add, color: AppColor.white, size: 18),
                           SizedBox(width: 8.w),
                           Text(
                             "Data Sumur",
-                            style: AppTheme.medium.copyWith(color: AppColor.white),
+                            style:
+                                AppTheme.medium.copyWith(color: AppColor.white),
                           ),
                         ],
                       ),
@@ -105,7 +108,35 @@ class _SumurPageState extends State<SumurPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 8.h),
+              TextField(
+                decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                  filled: true,
+                  fillColor: AppColor.white,
+                  hintText: "Cari Data",
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: AppColor.light,
+                    size: 20,
+                  ),
+                  hintStyle: AppTheme.title4.copyWith(color: AppColor.light),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(60),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(60),
+                    borderSide: BorderSide(color: AppColor.superLight),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(60),
+                    borderSide: BorderSide(color: AppColor.superLight),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.h),
               Expanded(
                 child: BlocBuilder<SumurCubit, SumurState>(
                   builder: (context, state) {
