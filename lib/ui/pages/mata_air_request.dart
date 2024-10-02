@@ -1,17 +1,12 @@
 part of 'pages.dart';
 
 class MataAirRequest extends StatefulWidget {
-  MataAirRequest(
-      {super.key,
-      this.tapKoordinat,
-      this.tapDropValue,
-      this.tapManfaatJiwa,
-      this.tapManfaatLuas});
+  MataAirRequest({
+    super.key,
+    this.mataAir,
+  });
 
-  TextEditingController? tapKoordinat;
-  String? tapDropValue;
-  TextEditingController? tapManfaatJiwa;
-  TextEditingController? tapManfaatLuas;
+  final MataAir? mataAir;
 
   @override
   State<MataAirRequest> createState() => _MataAirRequestState();
@@ -19,22 +14,73 @@ class MataAirRequest extends StatefulWidget {
 
 class _MataAirRequestState extends State<MataAirRequest> {
   String? _dropValue;
-  TextEditingController _koordinatController = TextEditingController();
-  TextEditingController _manfaatJiwaController = TextEditingController();
-  TextEditingController _manfaatLuasController = TextEditingController();
-  Position? _currentPosition;
+  late TextEditingController _latitudeController;
+  late TextEditingController _longitudeController;
+  late TextEditingController _koordinatController;
+  late TextEditingController _manfaatJiwaController;
+  late TextEditingController _manfaatLuasController;
   bool _isLoading = false;
 
   @override
   void initState() {
-    _getCurrentPosition();
     super.initState();
+    _latitudeController = TextEditingController(
+      text: widget.mataAir != null
+          ? widget.mataAir!.koordinat.latitude.toString()
+          : '',
+    );
+    _longitudeController = TextEditingController(
+      text: widget.mataAir != null
+          ? widget.mataAir!.koordinat.longitude.toString()
+          : '',
+    );
+    _koordinatController = TextEditingController(
+      text: widget.mataAir != null
+          ? _formatKoordinat(widget.mataAir!.koordinat.latitude,
+              widget.mataAir!.koordinat.longitude)
+          : '',
+    );
+    _dropValue = widget.mataAir?.operasi;
+    _manfaatJiwaController =
+        TextEditingController(text: widget.mataAir?.manfaatJiwa);
+    _manfaatLuasController =
+        TextEditingController(text: widget.mataAir?.manfaatIrigasi);
+
+    if (widget.mataAir == null) {
+      _getCurrentPosition();
+    }
+  }
+
+  @override
+  void dispose() {
+    _latitudeController.dispose();
+    _longitudeController.dispose();
+    _koordinatController.removeListener(_updateLatLong);
+    _manfaatJiwaController.dispose();
+    _manfaatLuasController.dispose();
+    super.dispose();
+  }
+
+  String _formatKoordinat(double? lat, double? long) {
+    if (lat != null && long != null) {
+      return "${lat.toStringAsFixed(6)} , ${long.toStringAsFixed(6)}";
+    }
+    return "";
+  }
+
+  void _updateLatLong() {
+    final koordinatParts = _koordinatController.text.split(',');
+    if (koordinatParts.length == 2) {
+      final lat = double.tryParse(koordinatParts[0].trim());
+      final long = double.tryParse(koordinatParts[1].trim());
+      if (lat != null && long != null) {
+        _latitudeController.text = lat.toString();
+        _longitudeController.text = long.toString();
+      }
+    }
   }
 
   Future<void> _getCurrentPosition() async {
-    if (widget.tapKoordinat != null) {
-      return;
-    }
     setState(() {
       _isLoading = true;
     });
@@ -48,9 +94,9 @@ class _MataAirRequestState extends State<MataAirRequest> {
     try {
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
-        _currentPosition = position;
         _koordinatController.text =
-            "${_currentPosition?.latitude} , ${_currentPosition?.longitude}";
+            _formatKoordinat(position.latitude, position.longitude);
+        _updateLatLong(); // Ini akan memperbarui _latitudeController dan _longitudeController
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -59,6 +105,39 @@ class _MataAirRequestState extends State<MataAirRequest> {
         _isLoading = false;
       });
     }
+  }
+
+  void _submitData() {
+    _updateLatLong(); // Pastikan latitude dan longitude terupdate dari _koordinatController
+
+    final latitude = double.tryParse(_latitudeController.text);
+    final longitude = double.tryParse(_longitudeController.text);
+
+    if (latitude == null || longitude == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Koordinat tidak valid')),
+      );
+      return;
+    }
+
+    final koordinat = Koordinat(latitude: latitude, longitude: longitude);
+
+    final mataAir = MataAir(
+      name: "belum", // Anda mungkin ingin mengubah ini sesuai kebutuhan
+      koordinat: koordinat,
+      operasi: _dropValue ?? '',
+      manfaatJiwa: _manfaatJiwaController.text,
+      manfaatIrigasi: _manfaatLuasController.text,
+    );
+
+    if (widget.mataAir == null) {
+      context.read<MataAirCubit>().addMataAir(mataAir);
+    } else {
+      mataAir.id = widget.mataAir!.id;
+      context.read<MataAirCubit>().updateMataAir(mataAir);
+    }
+
+    Navigator.pop(context);
   }
 
   @override
@@ -75,13 +154,8 @@ class _MataAirRequestState extends State<MataAirRequest> {
               width: 18.w,
               colorFilter: ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
             ),
-            SizedBox(
-              width: 4.w,
-            ),
-            Text(
-              "Data Mata Air",
-              style: AppTheme.title,
-            )
+            SizedBox(width: 4.w),
+            Text("Data Mata Air", style: AppTheme.title),
           ],
         ),
       ),
@@ -97,61 +171,59 @@ class _MataAirRequestState extends State<MataAirRequest> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.tapManfaatJiwa != null ? "Ubah Data Mata Air" :
-                "Input Data Mata Air",
+              Text(
+                widget.mataAir != null
+                    ? "Ubah Data Mata Air"
+                    : "Input Data Mata Air",
                 style: AppTheme.title,
               ),
-              SizedBox(
-                height: 16.h,
-              ),
+              SizedBox(height: 16.h),
               CustomFormField(
-                controller: widget.tapKoordinat ?? _koordinatController,
+                controller: _koordinatController,
                 label: "Koordinat",
-                hintText: "Koordinat",
+                hintText: "Latitude , Longitude",
                 isLoading: _isLoading,
               ),
-              SizedBox(
-                height: 16.h,
-              ),
+              SizedBox(height: 16.h),
               CustomDropdownField(
-                  label: "Status Operasi",
-                  value: widget.tapDropValue ?? _dropValue,
-                  items: [
-                    "Operasi",
-                    "Tidak Operasi",
-                  ],
-                  onChange: (value) {},
-                  hint: "Status Operasi"),
-              SizedBox(
-                height: 16.h,
+                label: "Status Operasi",
+                value: _dropValue,
+                items: ["Operasi", "Tidak Operasi"],
+                onChange: (value) {
+                  setState(() {
+                    _dropValue = value;
+                  });
+                },
+                hint: "Status Operasi",
               ),
+              SizedBox(height: 16.h),
               CustomFormField(
-                controller: widget.tapManfaatJiwa ?? _manfaatJiwaController,
+                controller: _manfaatJiwaController,
                 label: "Manfaat Jiwa",
                 hintText: "Manfaat Jiwa",
               ),
-              SizedBox(
-                height: 16.h,
-              ),
+              SizedBox(height: 16.h),
               CustomFormField(
-                controller: widget.tapManfaatLuas ?? _manfaatLuasController,
+                controller: _manfaatLuasController,
                 label: "Manfaat Luas Daerah Irigasi",
                 hintText: "Manfaat Luas Daerah Irigasi",
               ),
-              SizedBox(
-                height: 16.h,
-              ),
+              SizedBox(height: 16.h),
               ElevatedButton(
-                  style: ButtonStyle(
-                      minimumSize:
-                          WidgetStateProperty.all(Size(double.infinity, 46.h)),
-                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                      backgroundColor: WidgetStateProperty.all(
-                        AppColor.primary,
-                      )),
-                  onPressed: () {},
-                  child: Text(widget.tapManfaatJiwa != null ? "Ubah Data" : "Simpan Data", style: AppTheme.button)),
+                style: ButtonStyle(
+                  minimumSize:
+                      WidgetStatePropertyAll(Size(double.infinity, 46.h)),
+                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  )),
+                  backgroundColor: WidgetStatePropertyAll(AppColor.primary),
+                ),
+                onPressed: _submitData,
+                child: Text(
+                  widget.mataAir != null ? "Ubah Data" : "Simpan Data",
+                  style: AppTheme.button,
+                ),
+              ),
             ],
           ),
         ),

@@ -2,14 +2,16 @@ part of 'widgets.dart';
 
 class MataAirCard extends StatelessWidget {
   const MataAirCard({
-    required this.koordinat,
+    required this.latitude,
+    required this.longitude,
     required this.operasi,
     required this.manfaatJiwa,
     required this.manfaatIrigasi,
     super.key,
   });
 
-  final String koordinat;
+  final double latitude;
+  final double longitude;
   final String operasi;
   final String manfaatJiwa;
   final String manfaatIrigasi;
@@ -19,10 +21,7 @@ class MataAirCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Get.to(() => MataAirRequest(
-              tapKoordinat: TextEditingController(text: koordinat),
-              tapManfaatJiwa: TextEditingController(text: manfaatJiwa),
-              tapDropValue: operasi,
-              tapManfaatLuas: TextEditingController(text: manfaatIrigasi),
+          mataAir: MataAir(name: "belum ada", koordinat: Koordinat(latitude: latitude, longitude: longitude), manfaatJiwa: manfaatJiwa, operasi: operasi, manfaatIrigasi: manfaatIrigasi)
             ));
       },
       child: Column(
@@ -51,7 +50,7 @@ class MataAirCard extends StatelessWidget {
                         height: 4.h,
                       ),
                       Text(
-                        koordinat,
+                        "$latitude, $longitude",
                         style: AppTheme.title3.copyWith(color: AppColor.dark),
                         overflow: TextOverflow.ellipsis,
                       ),

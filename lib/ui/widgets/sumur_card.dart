@@ -2,7 +2,8 @@ part of 'widgets.dart';
 
 class SumurCard extends StatelessWidget {
   const SumurCard({
-    required this.koordinat,
+    required this.latitude,
+    required this.longitude,
     required this.operasi,
     required this.manfaatJiwa,
     required this.manfaatIrigasi,
@@ -12,7 +13,8 @@ class SumurCard extends StatelessWidget {
     super.key,
   });
 
-  final String koordinat;
+  final double latitude;
+  final double longitude;
   final String operasi;
   final String manfaatJiwa;
   final String manfaatIrigasi;
@@ -25,13 +27,16 @@ class SumurCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         Get.to(() => SumurRequest(
-              tapKoordinat: TextEditingController(text: koordinat),
-              tapManfaatJiwa: TextEditingController(text: manfaatJiwa),
-              tapDropValue: operasi,
-              tapManfaatLuas: TextEditingController(text: manfaatIrigasi),
-              tapFungsiSumur: TextEditingController(text: fungsiSumur),
-              tapDebit: TextEditingController(text: debit.toString()),
-              tapKondisiSumur: TextEditingController(text: kondisiSumur),
+              sumur: Sumur(
+                  name: "belum ada",
+                  koordinat:
+                      Koordinat(latitude: latitude, longitude: longitude),
+                  manfaatJiwa: manfaatJiwa,
+                  manfaatIrigasi: manfaatIrigasi,
+                  operasi: operasi,
+                  fungsiSumur: fungsiSumur,
+                  debit: debit,
+                  kondisiSumur: kondisiSumur),
             ));
       },
       child: Container(
@@ -61,7 +66,7 @@ class SumurCard extends StatelessWidget {
                         height: 4.h,
                       ),
                       Text(
-                        koordinat,
+                        "$latitude, $longitude",
                         style: AppTheme.title3.copyWith(color: AppColor.dark),
                         overflow: TextOverflow.ellipsis,
                       ),

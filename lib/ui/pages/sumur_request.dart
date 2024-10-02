@@ -1,49 +1,78 @@
 part of 'pages.dart';
 
 class SumurRequest extends StatefulWidget {
-  SumurRequest(
-      {super.key,
-      this.tapKoordinat,
-      this.tapDropValue,
-      this.tapManfaatJiwa,
-      this.tapManfaatLuas,
-      this.tapDebit,
-      this.tapFungsiSumur,
-      this.tapKondisiSumur});
+  SumurRequest({
+    Key? key,
+    this.sumur,
+  }) : super(key: key);
 
-  TextEditingController? tapKoordinat;
-  String? tapDropValue;
-  TextEditingController? tapManfaatJiwa;
-  TextEditingController? tapManfaatLuas;
-  TextEditingController? tapDebit;
-  TextEditingController? tapFungsiSumur;
-  TextEditingController? tapKondisiSumur;
+  final Sumur? sumur;
 
   @override
   State<SumurRequest> createState() => _SumurRequestState();
 }
 
 class _SumurRequestState extends State<SumurRequest> {
-  String? _dropValue;
-  TextEditingController _koordinatController = TextEditingController();
-  TextEditingController _manfaatJiwaController = TextEditingController();
-  TextEditingController _manfaatLuasController = TextEditingController();
-  TextEditingController _debitController = TextEditingController();
-  TextEditingController _fungsiSumurController = TextEditingController();
-  TextEditingController _kondisiSumurController = TextEditingController();
-  Position? _currentPosition;
+  final _formKey = GlobalKey<FormState>();
+
+  late TextEditingController _nameController;
+  late TextEditingController _latitudeController;
+  late TextEditingController _longitudeController;
+  late TextEditingController _koordinatController;
+  late TextEditingController _manfaatJiwaController;
+  late TextEditingController _manfaatIrigasiController;
+  late TextEditingController _debitController;
+  late TextEditingController _fungsiSumurController;
+  late TextEditingController _kondisiSumurController;
+
+  String? _operasi;
   bool _isLoading = false;
 
   @override
   void initState() {
-    _getCurrentPosition();
     super.initState();
+    _nameController = TextEditingController(text: widget.sumur?.name);
+    _latitudeController = TextEditingController(
+      text: widget.sumur != null
+          ? widget.sumur!.koordinat.latitude.toString()
+          : '',
+    );
+    _longitudeController = TextEditingController(
+      text: widget.sumur != null
+          ? widget.sumur!.koordinat.longitude.toString()
+          : '',
+    );
+    _koordinatController = TextEditingController(
+      text: widget.sumur != null
+          ? _formatKoordinat(widget.sumur!.koordinat.latitude,
+              widget.sumur!.koordinat.longitude)
+          : '',
+    );
+    _manfaatJiwaController =
+        TextEditingController(text: widget.sumur?.manfaatJiwa);
+    _manfaatIrigasiController =
+        TextEditingController(text: widget.sumur?.manfaatIrigasi);
+    _debitController =
+        TextEditingController(text: widget.sumur?.debit.toString());
+    _fungsiSumurController =
+        TextEditingController(text: widget.sumur?.fungsiSumur);
+    _kondisiSumurController =
+        TextEditingController(text: widget.sumur?.kondisiSumur);
+    _operasi = widget.sumur?.operasi;
+
+    if (widget.sumur == null) {
+      _getCurrentPosition();
+    }
+  }
+
+  String _formatKoordinat(double? lat, double? long) {
+    if (lat != null && long != null) {
+      return "${lat.toStringAsFixed(6)} , ${long.toStringAsFixed(6)}";
+    }
+    return "";
   }
 
   Future<void> _getCurrentPosition() async {
-    if (widget.tapKoordinat != null) {
-      return;
-    }
     setState(() {
       _isLoading = true;
     });
@@ -57,9 +86,9 @@ class _SumurRequestState extends State<SumurRequest> {
     try {
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
-        _currentPosition = position;
         _koordinatController.text =
-            "${_currentPosition?.latitude} , ${_currentPosition?.longitude}";
+            _formatKoordinat(position.latitude, position.longitude);
+        _updateLatLong(); // Ini akan memperbarui _latitudeController dan _longitudeController
       });
     } catch (e) {
       debugPrint(e.toString());
@@ -84,13 +113,8 @@ class _SumurRequestState extends State<SumurRequest> {
               width: 18.w,
               colorFilter: ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
             ),
-            SizedBox(
-              width: 4.w,
-            ),
-            Text(
-              "Data Sumur",
-              style: AppTheme.title,
-            )
+            SizedBox(width: 4.w),
+            Text("Data Sumur", style: AppTheme.title),
           ],
         ),
       ),
@@ -103,101 +127,152 @@ class _SumurRequestState extends State<SumurRequest> {
             color: AppColor.white,
             borderRadius: BorderRadius.circular(14),
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.tapManfaatJiwa != null
-                      ? "Ubah Data Sumur"
-                      : "Input Data Sumur",
-                  style: AppTheme.title,
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                CustomFormField(
-                  controller: widget.tapKoordinat ?? _koordinatController,
-                  label: "Koordinat",
-                  hintText: "Koordinat",
-                  isLoading: _isLoading,
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                CustomFormField(
-                  controller: widget.tapFungsiSumur ?? _fungsiSumurController,
-                  label: "Fungsi Sumur",
-                  hintText: "Fungsi Sumur",
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                CustomFormField(
-                  controller: widget.tapManfaatJiwa ?? _manfaatJiwaController,
-                  label: "Manfaat Jiwa",
-                  hintText: "Manfaat Jiwa",
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                CustomFormField(
-                  controller: widget.tapManfaatLuas ?? _manfaatLuasController,
-                  label: "Manfaat Luas Daerah Irigasi",
-                  hintText: "Manfaat Luas Daerah Irigasi",
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                CustomFormField(
-                  controller: widget.tapDebit ?? _debitController,
-                  label: "Debit",
-                  hintText: "Debit",
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                CustomFormField(
-                  controller: widget.tapKondisiSumur ?? _kondisiSumurController,
-                  label: "Kondisi Sumur",
-                  hintText: "Kondisi Sumur",
-                ),
-                SizedBox(
-                  height: 16.h,
-                ),
-                CustomDropdownField(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.sumur != null
+                        ? "Ubah Data Sumur"
+                        : "Input Data Sumur",
+                    style: AppTheme.title,
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomFormField(
+                    controller: _koordinatController,
+                    label: "Koordinat",
+                    hintText: "Latitude , Longitude",
+                    isLoading: _isLoading,
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomFormField(
+                    controller: _fungsiSumurController,
+                    label: "Fungsi Sumur",
+                    hintText: "Fungsi Sumur",
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomFormField(
+                    controller: _manfaatJiwaController,
+                    label: "Manfaat Jiwa",
+                    hintText: "Manfaat Jiwa",
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomFormField(
+                    controller: _manfaatIrigasiController,
+                    label: "Manfaat Luas Daerah Irigasi",
+                    hintText: "Manfaat Luas Daerah Irigasi",
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomFormField(
+                    controller: _debitController,
+                    label: "Debit",
+                    hintText: "Debit",
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomFormField(
+                    controller: _kondisiSumurController,
+                    label: "Kondisi Sumur",
+                    hintText: "Kondisi Sumur",
+                  ),
+                  SizedBox(height: 16.h),
+                  CustomDropdownField(
                     label: "Status Operasi",
-                    value: widget.tapDropValue ?? _dropValue,
-                    items: [
-                      "Operasi",
-                      "Tidak Operasi",
-                    ],
-                    onChange: (value) {},
-                    hint: "Status Operasi"),
-                SizedBox(
-                  height: 16.h,
-                ),
-                ElevatedButton(
+                    value: _operasi,
+                    items: ["Operasi", "Tidak Operasi"],
+                    onChange: (value) {
+                      setState(() {
+                        _operasi = value;
+                      });
+                    },
+                    hint: "Status Operasi",
+                  ),
+                  SizedBox(height: 16.h),
+                  ElevatedButton(
                     style: ButtonStyle(
-                        minimumSize: WidgetStateProperty.all(
-                            Size(double.infinity, 46.h)),
-                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8))),
-                        backgroundColor: WidgetStateProperty.all(
-                          AppColor.primary,
-                        )),
-                    onPressed: () {},
+                      minimumSize: MaterialStateProperty.all(
+                          Size(double.infinity, 46.h)),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8))),
+                      backgroundColor:
+                          MaterialStateProperty.all(AppColor.primary),
+                    ),
+                    onPressed: _submitData,
                     child: Text(
-                        widget.tapManfaatJiwa != null
-                            ? "Ubah Data"
-                            : "Simpan Data",
-                        style: AppTheme.button)),
-              ],
+                      widget.sumur != null ? "Ubah Data" : "Simpan Data",
+                      style: AppTheme.button,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _submitData() {
+    _updateLatLong(); // Pastikan latitude dan longitude terupdate dari _koordinatController
+
+    final latitude = double.tryParse(_latitudeController.text);
+    final longitude = double.tryParse(_longitudeController.text);
+
+    if (latitude == null || longitude == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Koordinat tidak valid')),
+      );
+      return;
+    }
+
+    final koordinat = Koordinat(latitude: latitude, longitude: longitude);
+
+    final sumur = Sumur(
+      name: "belum", // Anda mungkin ingin mengubah ini sesuai kebutuhan
+      koordinat: koordinat,
+      operasi: _operasi ?? '',
+      manfaatJiwa: _manfaatJiwaController.text,
+      manfaatIrigasi: _manfaatIrigasiController.text,
+      kondisiSumur: _kondisiSumurController.text,
+      fungsiSumur: _fungsiSumurController.text,
+      debit: _debitController.text.isEmpty ? 0 : double.parse(_debitController.text),
+    );
+
+    if (widget.sumur == null) {
+      context.read<SumurCubit>().addSumur(sumur);
+    } else {
+      sumur.id = widget.sumur!.id;
+      context.read<SumurCubit>().updateSumur(sumur);
+    }
+
+    Navigator.pop(context);
+  }
+
+  void _updateLatLong() {
+    final koordinatParts = _koordinatController.text.split(',');
+    if (koordinatParts.length == 2) {
+      final lat = double.tryParse(koordinatParts[0].trim());
+      final long = double.tryParse(koordinatParts[1].trim());
+      if (lat != null && long != null) {
+        _latitudeController.text = lat.toString();
+        _longitudeController.text = long.toString();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
+    _koordinatController.removeListener(_updateLatLong);
+    _manfaatJiwaController.dispose();
+    _manfaatIrigasiController.dispose();
+    _debitController.dispose();
+    _fungsiSumurController.dispose();
+    _kondisiSumurController.dispose();
+    super.dispose();
   }
 }
