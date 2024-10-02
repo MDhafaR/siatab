@@ -211,24 +211,24 @@ class _LoginPageState extends State<LoginPage> {
                               ))
                           : Text("Masuk", style: AppTheme.button)),
                   const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Belum punya akun? ",
-                        style: AppTheme.caption3,
-                      ),
-                      TextButton(
-                        style: ButtonStyle(
-                            elevation: WidgetStatePropertyAll(0),
-                            padding: WidgetStatePropertyAll(EdgeInsets.zero)),
-                        onPressed: () {},
-                        child: Text("Daftar",
-                            style: AppTheme.caption3
-                                .copyWith(color: AppColor.primary)),
-                      )
-                    ],
-                  )
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Text(
+                  //       "Belum punya akun? ",
+                  //       style: AppTheme.caption3,
+                  //     ),
+                  //     TextButton(
+                  //       style: ButtonStyle(
+                  //           elevation: WidgetStatePropertyAll(0),
+                  //           padding: WidgetStatePropertyAll(EdgeInsets.zero)),
+                  //       onPressed: () {},
+                  //       child: Text("Daftar",
+                  //           style: AppTheme.caption3
+                  //               .copyWith(color: AppColor.primary)),
+                  //     )
+                  //   ],
+                  // )
                 ],
               ),
             ),

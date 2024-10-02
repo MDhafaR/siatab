@@ -87,7 +87,7 @@ class _MataAirPageState extends State<MataAirPage> {
                         )),
                     InkWell(
                       onTap: () {
-                        Get.to(() => const MataAirRequest());
+                        Get.to(() => MataAirRequest());
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -123,7 +123,7 @@ class _MataAirPageState extends State<MataAirPage> {
                     itemCount: 5,
                     itemBuilder: (context, index) {
                     return MataAirCard(
-                        koordinat: "-7.193252111.193252111",
+                        koordinat: "-7.193252111 , 107.193252111",
                         operasi: "Operasi",
                         manfaatJiwa: "Air Baku",
                         manfaatIrigasi: "JIAT");

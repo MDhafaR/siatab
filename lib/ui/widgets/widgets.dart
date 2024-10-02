@@ -6,6 +6,7 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:siatab/themes/colors.dart';
 import 'package:siatab/themes/theme.dart';
 import 'package:siatab/ui/pages/pages.dart';

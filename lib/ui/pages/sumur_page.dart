@@ -87,7 +87,7 @@ class _SumurPageState extends State<SumurPage> {
                         )),
                     InkWell(
                       onTap: () {
-                        Get.to(() => const SumurRequest());
+                        Get.to(() => SumurRequest());
                       },
                       child: Container(
                         decoration: BoxDecoration(

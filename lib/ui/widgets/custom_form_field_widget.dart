@@ -28,6 +28,7 @@ class CustomFormField extends StatefulWidget {
     this.inputFormatter,
     this.borderRadius,
     this.borderSideColor,
+    this.isLoading,
   }) : super(key: key);
 
   final Widget? child;
@@ -53,6 +54,7 @@ class CustomFormField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatter;
   final double? borderRadius;
   final Color? borderSideColor;
+  final bool? isLoading;
 
   @override
   State<CustomFormField> createState() => _CustomFormFieldState();
@@ -75,102 +77,138 @@ class _CustomFormFieldState extends State<CustomFormField> {
                 ),
           ),
           SizedBox(height: 8.h),
-          widget.child ??
-              TextFormField(
-                style: widget.style ?? AppTheme.caption2.copyWith(color: AppColor.dark),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                maxLines: widget.maxLines ?? 1,
-                obscureText: widget.passwordMode ? _obscureText : false,
-                controller: widget.controller,
-                readOnly: widget.readOnly,
-                enabled: widget.enabled,
-                keyboardType: widget.keyboardType ??
-                    (widget.passwordMode
-                        ? TextInputType.visiblePassword
-                        : TextInputType.text),
-                textInputAction: widget.textInputAction ?? TextInputAction.next,
-                decoration: InputDecoration(
-                  prefixText: widget.prefixText,
-                  prefixStyle: const TextStyle(color: AppColor.dark),
-                  filled: !widget.enabled ? true : false,
-                  fillColor: widget.fillColor,
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(widget.borderRadius ?? 8),
+          if (widget.isLoading == true)
+            TextFormField(
+              enabled: false,
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon: Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColor.superLight,
+                      ),
+                      margin: EdgeInsets.all(15),
+                      width: 200,
+                      height: 1,
                     ),
-                    borderSide: BorderSide(
-                        color: widget.borderSideColor ?? AppColor.superLight),
                   ),
-                  enabledBorder: widget.roundedField
-                      ? OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(widget.borderRadius ?? 8),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                    borderSide: BorderSide(color: AppColor.superLight),
+                  ),
+                  contentPadding: (EdgeInsets.symmetric(vertical: 10.w)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                    borderSide: BorderSide(color: AppColor.superLight),
+                  )),
+            )
+          else
+            widget.child ??
+                TextFormField(
+                  style: widget.style ??
+                      AppTheme.caption2.copyWith(color: AppColor.dark),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  maxLines: widget.maxLines ?? 1,
+                  obscureText: widget.passwordMode ? _obscureText : false,
+                  controller: widget.controller,
+                  readOnly: widget.readOnly,
+                  enabled: widget.enabled,
+                  keyboardType: widget.keyboardType ??
+                      (widget.passwordMode
+                          ? TextInputType.visiblePassword
+                          : TextInputType.text),
+                  textInputAction:
+                      widget.textInputAction ?? TextInputAction.next,
+                  decoration: InputDecoration(
+                    prefixText: widget.prefixText,
+                    prefixStyle: const TextStyle(color: AppColor.dark),
+                    filled: !widget.enabled ? true : false,
+                    fillColor: widget.fillColor,
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(widget.borderRadius ?? 8),
+                      ),
+                      borderSide: BorderSide(
+                          color: widget.borderSideColor ?? AppColor.superLight),
+                    ),
+                    enabledBorder: widget.roundedField
+                        ? OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(widget.borderRadius ?? 8),
+                            ),
+                            borderSide: BorderSide(
+                                color: widget.borderSideColor ??
+                                    AppColor.superLight),
+                          )
+                        : const UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.primary),
                           ),
-                          borderSide: BorderSide(
-                              color: widget.borderSideColor ?? AppColor.superLight),
-                        )
-                      : const UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.primary),
-                        ),
-                  focusedBorder: widget.roundedField
-                      ? OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(widget.borderRadius ?? 8),
+                    focusedBorder: widget.roundedField
+                        ? OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(widget.borderRadius ?? 8),
+                            ),
+                            borderSide: BorderSide(color: AppColor.primary),
+                          )
+                        : const UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.primary),
                           ),
-                          borderSide: BorderSide(color: AppColor.primary),
-                        )
-                      : const UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.primary),
-                        ),
-                  errorBorder: widget.roundedField
-                      ? OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(widget.borderRadius ?? 8),
+                    errorBorder: widget.roundedField
+                        ? OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(widget.borderRadius ?? 8),
+                            ),
+                            borderSide: BorderSide(color: AppColor.danger),
+                          )
+                        : const UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.danger),
                           ),
-                          borderSide: BorderSide(color: AppColor.danger),
-                        )
-                      : const UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.danger),
-                        ),
-                  focusedErrorBorder: widget.roundedField
-                      ? OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(widget.borderRadius ?? 8),
+                    focusedErrorBorder: widget.roundedField
+                        ? OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(widget.borderRadius ?? 8),
+                            ),
+                            borderSide: BorderSide(color: AppColor.danger),
+                          )
+                        : const UnderlineInputBorder(
+                            borderSide: BorderSide(color: AppColor.danger),
                           ),
-                          borderSide: BorderSide(color: AppColor.danger),
-                        )
-                      : const UnderlineInputBorder(
-                          borderSide: BorderSide(color: AppColor.danger),
-                        ),
-                  prefixIcon: widget.prefixIcon,
-                  suffixIcon: widget.passwordMode
-                      ? GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                          child: _obscureText
-                              ? const Icon(Icons.visibility_off,
-                                  color: AppColor.primary)
-                              : const Icon(Icons.visibility,
-                                  color: AppColor.primary),
-                        )
-                      : widget.suffixIcon,
-                  contentPadding: widget.contentPadding ??
-                      (widget.roundedField
-                          ? EdgeInsets.symmetric(
-                              vertical: 8.w, horizontal: 10.w)
-                          : EdgeInsets.symmetric(vertical: 14.w)),
-                  hintStyle: widget.hintStyle ??
-                      AppTheme.caption2.copyWith(color: AppColor.light),
-                  hintText: widget.hintText,
+                    prefixIcon: widget.prefixIcon,
+                    suffixIcon: widget.passwordMode
+                        ? GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                            child: _obscureText
+                                ? const Icon(Icons.visibility_off,
+                                    color: AppColor.primary)
+                                : const Icon(Icons.visibility,
+                                    color: AppColor.primary),
+                          )
+                        : widget.suffixIcon,
+                    contentPadding: widget.contentPadding ??
+                        (widget.roundedField
+                            ? EdgeInsets.symmetric(
+                                vertical: 8.w, horizontal: 10.w)
+                            : EdgeInsets.symmetric(vertical: 14.w)),
+                    hintStyle: widget.hintStyle ??
+                        AppTheme.caption2.copyWith(color: AppColor.light),
+                    hintText: widget.hintText,
+                  ),
+                  inputFormatters: widget.inputFormatter,
+                  onTap: widget.onFieldTap,
+                  validator: widget.validator,
+                  onChanged: widget.onChange,
                 ),
-                inputFormatters: widget.inputFormatter,
-                onTap: widget.onFieldTap,
-                validator: widget.validator,
-                onChanged: widget.onChange,
-              ),
         ],
       );
     } else {
