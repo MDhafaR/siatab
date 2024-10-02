@@ -120,93 +120,228 @@ class _SumurRequestState extends State<SumurRequest> {
       ),
       body: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(overscroll: false),
-        child: Container(
-          margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-          padding: EdgeInsets.all(22),
-          decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 11.h,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                  child: Text(
                     widget.sumur != null
                         ? "Ubah Data Sumur"
                         : "Input Data Sumur",
-                    style: AppTheme.title,
+                    style: AppTheme.title.copyWith(color: AppColor.dark),
                   ),
-                  SizedBox(height: 16.h),
-                  CustomFormField(
-                    controller: _koordinatController,
-                    label: "Koordinat",
-                    hintText: "Latitude , Longitude",
-                    isLoading: _isLoading,
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                Container(
+                  padding: EdgeInsets.all(22),
+                  decoration: BoxDecoration(
+                    color: AppColor.white,
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  SizedBox(height: 16.h),
-                  CustomFormField(
-                    controller: _fungsiSumurController,
-                    label: "Fungsi Sumur",
-                    hintText: "Fungsi Sumur",
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomFormField(
-                    controller: _manfaatJiwaController,
-                    label: "Manfaat Jiwa",
-                    hintText: "Manfaat Jiwa",
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomFormField(
-                    controller: _manfaatIrigasiController,
-                    label: "Manfaat Luas Daerah Irigasi",
-                    hintText: "Manfaat Luas Daerah Irigasi",
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomFormField(
-                    controller: _debitController,
-                    label: "Debit",
-                    hintText: "Debit",
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomFormField(
-                    controller: _kondisiSumurController,
-                    label: "Kondisi Sumur",
-                    hintText: "Kondisi Sumur",
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomDropdownField(
-                    label: "Status Operasi",
-                    value: _operasi,
-                    items: ["Operasi", "Tidak Operasi"],
-                    onChange: (value) {
-                      setState(() {
-                        _operasi = value;
-                      });
-                    },
-                    hint: "Status Operasi",
-                  ),
-                  SizedBox(height: 16.h),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      minimumSize: MaterialStateProperty.all(
-                          Size(double.infinity, 46.h)),
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8))),
-                      backgroundColor:
-                          MaterialStateProperty.all(AppColor.primary),
+                  child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Informasi Dasar",
+                            style:
+                                AppTheme.medium.copyWith(color: AppColor.dark),
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomFormField(
+                            label: "Kode Integrasi",
+                            hintText: "-",
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomFormField(
+                            label: "Nama/No Sumur",
+                            hintText: "Nama / No Sumur",
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomFormField(
+                            controller: _koordinatController,
+                            label: "Koordinat",
+                            hintText: "Latitude , Longitude",
+                            isLoading: _isLoading,
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomFormField(
+                            controller: _manfaatJiwaController,
+                            label: "Manfaat Jiwa",
+                            hintText: "Manfaat Jiwa",
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomFormField(
+                            controller: _manfaatIrigasiController,
+                            label: "Manfaat Luas Daerah Irigasi",
+                            hintText: "Manfaat Luas Daerah Irigasi",
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomFormField(
+                            controller: _debitController,
+                            label: "Debit",
+                            hintText: "Debit",
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomFormField(
+                            controller: _kondisiSumurController,
+                            label: "Kondisi Sumur",
+                            hintText: "Kondisi Sumur",
+                          ),
+                          SizedBox(height: 16.h),
+                          CustomDropdownField(
+                            label: "Status Operasi",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Status Operasi",
+                          ),
+                          SizedBox(height: 16.h),
+                          Divider(),
+                          SizedBox(height: 16.h),
+                          Text(
+                            "Informasi Wilayah Sungai",
+                            style:
+                                AppTheme.medium.copyWith(color: AppColor.dark),
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          CustomDropdownField(
+                            label: "Nama Balai",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Nama Balai",
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          CustomDropdownField(
+                            label: "Nama WS",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Nama WS",
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          CustomDropdownField(
+                            label: "Nama DAS",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Nama DAS",
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          CustomDropdownField(
+                            label: "Kota",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Kota",
+                          ),
+                          CustomDropdownField(
+                            label: "Provinsi",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Provinsi",
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          CustomDropdownField(
+                            label: "Kecamatan",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Kecamatan",
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          CustomDropdownField(
+                            label: "Kelurahan",
+                            value: _operasi,
+                            items: ["Operasi", "Tidak Operasi"],
+                            onChange: (value) {
+                              setState(() {
+                                _operasi = value;
+                              });
+                            },
+                            hint: "Kelurahan",
+                          ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              minimumSize: WidgetStatePropertyAll(
+                                  Size(double.infinity, 46.h)),
+                              shape: WidgetStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8))),
+                              backgroundColor:
+                                  WidgetStatePropertyAll(AppColor.primary),
+                            ),
+                            onPressed: _submitData,
+                            child: Text(
+                              widget.sumur != null
+                                  ? "Ubah Data"
+                                  : "Simpan Data",
+                              style: AppTheme.button,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    onPressed: _submitData,
-                    child: Text(
-                      widget.sumur != null ? "Ubah Data" : "Simpan Data",
-                      style: AppTheme.button,
-                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -237,7 +372,9 @@ class _SumurRequestState extends State<SumurRequest> {
       manfaatIrigasi: _manfaatIrigasiController.text,
       kondisiSumur: _kondisiSumurController.text,
       fungsiSumur: _fungsiSumurController.text,
-      debit: _debitController.text.isEmpty ? 0 : double.parse(_debitController.text),
+      debit: _debitController.text.isEmpty
+          ? 0
+          : double.parse(_debitController.text),
     );
 
     if (widget.sumur == null) {

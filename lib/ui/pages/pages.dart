@@ -32,3 +32,4 @@ part 'mata_air_page.dart';
 part 'sumur_page.dart';
 part 'mata_air_request.dart';
 part 'sumur_request.dart';
+part 'detail_sumur.dart';

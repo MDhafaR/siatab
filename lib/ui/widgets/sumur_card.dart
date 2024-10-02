@@ -101,19 +101,24 @@ class SumurCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 6.5, horizontal: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: AppColor.primary
-                ),
-                child: Row(children: [
-                  SvgPicture.asset("assets/paper.svg", width: 18,),
-                  SizedBox(
-                    width: 8.w,
+              InkWell(
+                onTap: () {
+                  Get.to(() => DetailSumur());
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 6.5, horizontal: 12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: AppColor.primary
                   ),
-                  Text("Detail Data", style: AppTheme.caption2.copyWith(color: AppColor.white),)
-                ],),
+                  child: Row(children: [
+                    SvgPicture.asset("assets/paper.svg", width: 18,),
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    Text("Detail Data", style: AppTheme.caption2.copyWith(color: AppColor.white),)
+                  ],),
+                ),
               ),
               SizedBox(
                 width: 8.w,
