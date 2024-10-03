@@ -18,4 +18,5 @@ class AppColor {
   static const Color danger = Color(0xFFEA5455);
   static const Color orange = Color(0xFFFF9F43);
   static const Color green = Color(0xFF26BF6A);
+  static const Color lightGreen = Color(0xFFEAF9F1);
 }

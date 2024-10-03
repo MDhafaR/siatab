@@ -1,9 +1,9 @@
 part of 'pages.dart';
 
-class DetailSumur extends StatelessWidget {
-  const DetailSumur({super.key, required this.sumur});
+class DetailMataAir extends StatelessWidget {
+  const DetailMataAir({super.key, required this.mataAir});
 
-  final Sumur sumur;
+  final MataAir mataAir;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class DetailSumur extends StatelessWidget {
               colorFilter: ColorFilter.mode(AppColor.primary, BlendMode.srcIn),
             ),
             SizedBox(width: 4.w),
-            Text("Data Sumur", style: AppTheme.title),
+            Text("Data Mata Air", style: AppTheme.title),
           ],
         ),
       ),
@@ -35,7 +35,7 @@ class DetailSumur extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                     child: Text(
-                      "Detail Data Sumur",
+                      "Detail Data Mata Air",
                       style: AppTheme.title.copyWith(color: AppColor.dark),
                     ),
                   ),
@@ -43,7 +43,7 @@ class DetailSumur extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          Get.to(() => SumurRequest(sumur: sumur));
+                          Get.to(() => MataAirRequest(mataAir: mataAir));
                         },
                         child: Container(
                           padding: EdgeInsets.symmetric(
@@ -75,8 +75,8 @@ class DetailSumur extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           context
-                              .read<SumurCubit>()
-                              .deleteSumur(sumur.id!);
+                              .read<MataAirCubit>()
+                              .deleteMataAir(mataAir.id!);
                           Get.back();
                         },
                         child: Container(
@@ -127,17 +127,16 @@ class DetailSumur extends StatelessWidget {
                         childAspectRatio: 2.2,
                         children: [
                           ValueCard(
-                              title: "Nama/No Sumur",
-                              value: sumur.nama),
-                          ValueCard(title: "Kode Integrasi", value: sumur.kodeIntegrasi),
-                          ValueCard(title: "Manfaat Jiwa", value: sumur.manfaatJiwa),
+                              title: "Nama Mata Air", value: mataAir.nama),
+                          ValueCard(
+                              title: "Kode Integrasi",
+                              value: mataAir.kodeIntegrasi),
+                          ValueCard(
+                              title: "Manfaat Jiwa",
+                              value: mataAir.manfaatJiwa),
                           ValueCard(
                               title: "Manfaat Luas Daerah Irigasi",
-                              value: sumur.manfaatLuasDaerah),
-                          ValueCard(title: "Debit", value: sumur.debit.toString()),
-                          ValueCard(title: "Kondisi Sumur", value: sumur.kondisiSumur),
-                          ValueCard(
-                              title: "Fungsi Sumur", value: sumur.fungsiSumur),
+                              value: mataAir.manfaatLuasDaerah),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -152,14 +151,15 @@ class DetailSumur extends StatelessWidget {
                                     vertical: 4, horizontal: 8),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(4),
-                                    color: sumur.operasi == 'Operasi'
-                                  ? AppColor.lightGreen
-                                  : AppColor.danger),
+                                    color: mataAir.operasi == 'Operasi'
+                                        ? AppColor.lightGreen
+                                        : AppColor.danger),
                                 child: Text(
-                                  sumur.operasi,
-                                  style: AppTheme.semiBold.copyWith(color: sumur.operasi == 'Operasi'
-                                  ? AppColor.green
-                                  : AppColor.white),
+                                  mataAir.operasi,
+                                  style: AppTheme.semiBold.copyWith(
+                                      color: mataAir.operasi == 'Operasi'
+                                          ? AppColor.green
+                                          : AppColor.danger),
                                 ),
                               )
                             ],
@@ -184,13 +184,15 @@ class DetailSumur extends StatelessWidget {
                         childAspectRatio: 2.2,
                         children: [
                           ValueCard(
-                              title: "Nama Balai", value: sumur.namaBalai),
-                          ValueCard(title: "Nama WS", value: sumur.namaWs),
-                          ValueCard(title: "Nama DAS", value: sumur.namaDas),
-                          ValueCard(title: "Kota", value: sumur.kota),
-                          ValueCard(title: "Provinsi", value: sumur.provinsi),
-                          ValueCard(title: "Kecamatan", value: sumur.kecamatan),
-                          ValueCard(title: "Kelurahan", value: sumur.kelurahan),
+                              title: "Nama Balai", value: mataAir.namaBalai),
+                          ValueCard(title: "Nama WS", value: mataAir.namaWs),
+                          ValueCard(title: "Nama DAS", value: mataAir.namaDas),
+                          ValueCard(title: "Kota", value: mataAir.kota),
+                          ValueCard(title: "Provinsi", value: mataAir.provinsi),
+                          ValueCard(
+                              title: "Kecamatan", value: mataAir.kecamatan),
+                          ValueCard(
+                              title: "Kelurahan", value: mataAir.kelurahan),
                         ]),
                   ],
                 ),

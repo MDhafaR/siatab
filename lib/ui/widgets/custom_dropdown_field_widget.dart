@@ -136,7 +136,7 @@ class _CustomDropdownFieldState extends State<CustomDropdownField> {
                         )),
                       ),
                     const SizedBox(width: 8),
-                    Text(widget.items[index], style: AppTheme.body),
+                    Flexible(child: Text(widget.items[index], style: AppTheme.body)),
                   ],
                 ),
               );

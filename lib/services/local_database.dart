@@ -20,8 +20,16 @@ class LocalDatabase {
   final String columnLatitude = 'latitude';
   final String columnLongitude = 'longitude';
   final String columnManfaatJiwa = 'manfaat_jiwa';
-  final String columnManfaatIrigasi = 'manfaat_irigasi';
+  final String columnManfaatLuasDaerah = 'manfaat_luas_daerah';
   final String columnOperasi = 'operasi';
+  final String columnKodeIntegrasi = 'kode_integrasi';
+  final String columnNamaBalai = 'nama_balai';
+  final String columnNamaWs = 'nama_ws';
+  final String columnNamaDas = 'nama_das';
+  final String columnKota = 'kota';
+  final String columnProvinsi = 'provinsi';
+  final String columnKecamatan = 'kecamatan';
+  final String columnKelurahan = 'kelurahan';
 
   // Sumur specific columns
   final String columnFungsiSumur = 'fungsi_sumur';
@@ -50,39 +58,68 @@ class LocalDatabase {
             $columnLatitude REAL NOT NULL,
             $columnLongitude REAL NOT NULL,
             $columnManfaatJiwa TEXT NOT NULL,
+            $columnManfaatLuasDaerah TEXT NOT NULL,
             $columnOperasi TEXT NOT NULL,
-            $columnManfaatIrigasi TEXT NOT NULL
+            $columnKodeIntegrasi TEXT NOT NULL,
+            $columnNamaBalai TEXT NOT NULL,
+            $columnNamaWs TEXT NOT NULL,
+            $columnNamaDas TEXT NOT NULL,
+            $columnKota TEXT NOT NULL,
+            $columnProvinsi TEXT NOT NULL, 
+            $columnKecamatan TEXT NOT NULL,
+            $columnKelurahan TEXT NOT NULL
           )
         ''');
 
         await db.execute('''
           CREATE TABLE $tableSumur (
-            $columnId TEXT PRIMARY KEY,
+            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
             $columnName TEXT NOT NULL,
             $columnLatitude REAL NOT NULL,
             $columnLongitude REAL NOT NULL,
             $columnManfaatJiwa TEXT NOT NULL,
-            $columnManfaatIrigasi TEXT NOT NULL,
+            $columnManfaatLuasDaerah TEXT,
             $columnOperasi TEXT NOT NULL,
             $columnFungsiSumur TEXT NOT NULL,
             $columnDebit REAL NOT NULL,
-            $columnKondisiSumur TEXT NOT NULL
+            $columnKondisiSumur TEXT NOT NULL,
+            $columnKodeIntegrasi TEXT NOT NULL,
+            $columnNamaBalai TEXT NOT NULL,
+            $columnNamaWs TEXT NOT NULL,
+            $columnNamaDas TEXT NOT NULL,
+            $columnKota TEXT NOT NULL,
+            $columnProvinsi TEXT NOT NULL, 
+            $columnKecamatan TEXT NOT NULL,
+            $columnKelurahan TEXT NOT NULL
           )
         ''');
       },
+      onUpgrade: _onUpgrade,
     );
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {}
   }
 
   // MataAir CRUD operations
   Future<int> insertMataAir(MataAir mataAir) async {
     Database? db = await database();
     return await db!.insert(tableMataAir, {
-      columnName: mataAir.name,
+      columnName: mataAir.nama,
       columnLatitude: mataAir.koordinat.latitude,
       columnLongitude: mataAir.koordinat.longitude,
       columnManfaatJiwa: mataAir.manfaatJiwa,
       columnOperasi: mataAir.operasi,
-      columnManfaatIrigasi: mataAir.manfaatIrigasi,
+      columnManfaatLuasDaerah: mataAir.manfaatLuasDaerah,
+      columnKodeIntegrasi: mataAir.kodeIntegrasi,
+      columnNamaBalai: mataAir.namaBalai,
+      columnNamaWs: mataAir.namaWs,
+      columnNamaDas: mataAir.namaDas,
+      columnKota: mataAir.kota,
+      columnProvinsi: mataAir.provinsi,
+      columnKecamatan: mataAir.kecamatan,
+      columnKelurahan: mataAir.kelurahan,
     });
   }
 
@@ -97,12 +134,20 @@ class LocalDatabase {
     return await db!.update(
       tableMataAir,
       {
-        columnName: mataAir.name,
+        columnName: mataAir.nama,
         columnLatitude: mataAir.koordinat.latitude,
         columnLongitude: mataAir.koordinat.longitude,
         columnManfaatJiwa: mataAir.manfaatJiwa,
         columnOperasi: mataAir.operasi,
-        columnManfaatIrigasi: mataAir.manfaatIrigasi,
+        columnManfaatLuasDaerah: mataAir.manfaatLuasDaerah,
+        columnKodeIntegrasi: mataAir.kodeIntegrasi,
+        columnNamaBalai: mataAir.namaBalai,
+        columnNamaWs: mataAir.namaWs,
+        columnNamaDas: mataAir.namaDas,
+        columnKota: mataAir.kota,
+        columnProvinsi: mataAir.provinsi,
+        columnKecamatan: mataAir.kecamatan,
+        columnKelurahan: mataAir.kelurahan,
       },
       where: '$columnId = ?',
       whereArgs: [mataAir.id],
@@ -122,23 +167,24 @@ class LocalDatabase {
   Future<int> insertSumur(Sumur sumur) async {
     Database? db = await database();
     return await db!.insert(tableSumur, {
-      columnId: sumur.id,
-      columnName: sumur.name,
+      columnName: sumur.nama,
       columnLatitude: sumur.koordinat.latitude,
       columnLongitude: sumur.koordinat.longitude,
       columnManfaatJiwa: sumur.manfaatJiwa,
-      columnManfaatIrigasi: sumur.manfaatIrigasi,
+      columnManfaatLuasDaerah: sumur.manfaatLuasDaerah,
       columnOperasi: sumur.operasi,
       columnFungsiSumur: sumur.fungsiSumur,
       columnDebit: sumur.debit,
       columnKondisiSumur: sumur.kondisiSumur,
+      columnKodeIntegrasi: sumur.kodeIntegrasi,
+      columnNamaBalai: sumur.namaBalai,
+      columnNamaWs: sumur.namaWs,
+      columnNamaDas: sumur.namaDas,
+      columnKota: sumur.kota,
+      columnProvinsi: sumur.provinsi,
+      columnKecamatan: sumur.kecamatan,
+      columnKelurahan: sumur.kelurahan,
     });
-  }
-
-  Future<List<Sumur>> getSumur() async {
-    Database? db = await database();
-    var result = await db!.query(tableSumur);
-    return result.map((json) => Sumur.fromJson(json)).toList();
   }
 
   Future<int> updateSumur(Sumur sumur) async {
@@ -146,22 +192,37 @@ class LocalDatabase {
     return await db!.update(
       tableSumur,
       {
-        columnName: sumur.name,
+        columnName: sumur.nama,
         columnLatitude: sumur.koordinat.latitude,
         columnLongitude: sumur.koordinat.longitude,
         columnManfaatJiwa: sumur.manfaatJiwa,
-        columnManfaatIrigasi: sumur.manfaatIrigasi,
+        columnManfaatLuasDaerah: sumur.manfaatLuasDaerah,
         columnOperasi: sumur.operasi,
         columnFungsiSumur: sumur.fungsiSumur,
         columnDebit: sumur.debit,
         columnKondisiSumur: sumur.kondisiSumur,
+        columnKodeIntegrasi: sumur.kodeIntegrasi,
+        columnNamaBalai: sumur.namaBalai,
+        columnNamaWs: sumur.namaWs,
+        columnNamaDas: sumur.namaDas,
+        columnKota: sumur.kota,
+        columnProvinsi: sumur.provinsi,
+        columnKecamatan: sumur.kecamatan,
+        columnKelurahan: sumur.kelurahan,
       },
       where: '$columnId = ?',
       whereArgs: [sumur.id],
     );
   }
 
-  Future<int> deleteSumur(String id) async {
+  Future<List<Sumur>> getSumur() async {
+    Database? db = await database();
+    var result = await db!.query(tableSumur);
+    print('ini po sumur $result');
+    return result.map((json) => Sumur.fromJson(json)).toList();
+  }
+
+  Future<int> deleteSumur(int id) async {
     Database? db = await database();
     return await db!.delete(
       tableSumur,

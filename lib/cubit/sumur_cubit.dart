@@ -13,9 +13,12 @@ class SumurCubit extends Cubit<SumurState> {
   Future<void> loadSumur() async {
     try {
       emit(SumurLoading());
+      print("cek");
       final sumurList = await _localDatabase.getSumur();
+      print("ini po sumur load $sumurList");
       emit(SumurLoaded(sumurList));
     } catch (e) {
+      print("ini po error load sumur $e");
       emit(SumurError('Failed to load sumur data: ${e.toString()}'));
     }
   }
@@ -23,8 +26,9 @@ class SumurCubit extends Cubit<SumurState> {
   Future<void> addSumur(Sumur sumur) async {
     try {
       await _localDatabase.insertSumur(sumur);
-      await loadSumur(); // Reload the list after adding
+      await loadSumur();
     } catch (e) {
+      print("ini po error add sumur $e");
       emit(SumurError('Failed to add sumur: ${e.toString()}'));
     }
   }
@@ -38,7 +42,7 @@ class SumurCubit extends Cubit<SumurState> {
     }
   }
 
-  Future<void> deleteSumur(String id) async {
+  Future<void> deleteSumur(int id) async {
     try {
       await _localDatabase.deleteSumur(id);
       await loadSumur(); // Reload the list after deleting

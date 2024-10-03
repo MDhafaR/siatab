@@ -1,58 +1,90 @@
 import 'package:siatab/models/koordinat.dart';
 
 class Sumur {
-  String? id;
-  String name;
-  Koordinat koordinat;
+  int? id;
+  String nama;
+  String kodeIntegrasi;
   String manfaatJiwa;
-  String manfaatIrigasi;
-  String operasi;
-  String fungsiSumur;
+  String manfaatLuasDaerah;
   double debit;
   String kondisiSumur;
+  String fungsiSumur;
+  String operasi;
+  String namaBalai;
+  String namaWs;
+  String namaDas;
+  String kota;
+  String provinsi;
+  String kecamatan;
+  String kelurahan;
+  Koordinat koordinat;
 
   Sumur({
     this.id,
-    required this.name,
-    required this.koordinat,
+    required this.nama,
+    required this.kodeIntegrasi,
     required this.manfaatJiwa,
-    required this.manfaatIrigasi,
-    required this.operasi,
-    required this.fungsiSumur,
+    required this.manfaatLuasDaerah,
     required this.debit,
     required this.kondisiSumur,
+    required this.fungsiSumur,
+    required this.operasi,
+    required this.namaBalai,
+    required this.namaWs,
+    required this.namaDas,
+    required this.kota,
+    required this.provinsi,
+    required this.kecamatan,
+    required this.kelurahan,
+    required this.koordinat,
   });
 
   factory Sumur.fromJson(Map<String, dynamic> json) {
     return Sumur(
       id: json['id'],
-      name: json['name'],
+      nama: json['name'],
       koordinat: Koordinat.fromJson(json),
       manfaatJiwa: json['manfaat_jiwa'],
-      manfaatIrigasi: json['manfaat_irigasi'],
+      manfaatLuasDaerah: json['manfaat_luas_daerah'],
       operasi: json['operasi'],
-      fungsiSumur: json['fungsi_sumur'],
-      debit: json['debit'],
+      debit: json['debit'].toDouble(),
       kondisiSumur: json['kondisi_sumur'],
+      kodeIntegrasi: json['kode_integrasi'],
+      fungsiSumur: json['fungsi_sumur'],
+      namaBalai: json['nama_balai'],
+      namaWs: json['nama_ws'],
+      namaDas: json['nama_das'],
+      kota: json['kota'],
+      provinsi: json['provinsi'],
+      kecamatan: json['kecamatan'],
+      kelurahan: json['kelurahan'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'name': name,
-      ...koordinat.toJson(),
+      'name': nama,
+      'kode_integrasi': kodeIntegrasi,
       'manfaat_jiwa': manfaatJiwa,
-      'manfaat_irigasi': manfaatIrigasi,
-      'operasi': operasi,
-      'fungsi_sumur': fungsiSumur,
+      'manfaat_luas_daerah': manfaatLuasDaerah,
       'debit': debit,
       'kondisi_sumur': kondisiSumur,
+      'fungsi_sumur': fungsiSumur,
+      'operasi': operasi,
+      'nama_balai': namaBalai,
+      'nama_ws': namaWs,
+      'nama_das': namaDas,
+      'kota': kota,
+      'provinsi': provinsi,
+      'kecamatan': kecamatan,
+      'kelurahan': kelurahan,
+      ...koordinat.toJson(),
     };
   }
 
   @override
   String toString() {
-    return 'Sumur{id: $id, name: $name, koordinat: $koordinat, manfaatJiwa: $manfaatJiwa, manfaatIrigasi: $manfaatIrigasi}';
+    return 'Sumur{id: $id, nama: $nama, kodeIntegrasi: $kodeIntegrasi, manfaatJiwa: $manfaatJiwa, manfaatLuasDaerah: $manfaatLuasDaerah, debit: $debit, kondisiSumur: $kondisiSumur, fungsiSumur: $fungsiSumur, operasi: $operasi, namaBalai: $namaBalai, namaWs: $namaWs, namaDas: $namaDas, kota: $kota, provinsi: $provinsi, kecamatan: $kecamatan, kelurahan: $kelurahan, koordinat: $koordinat}';
   }
 }

@@ -67,29 +67,29 @@ class PanelWidget extends StatelessWidget {
                   SizedBox(
                     height: 12.h,
                   ),
-                  Text(
-                    "Jenis Peta",
-                    style: AppTheme.title.copyWith(color: AppColor.superDark),
-                  ),
-                  RadioListTile(
-                    contentPadding: EdgeInsets.zero,
-                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                    title: Text("OpenStreetMap"),
-                    value: "",
-                    groupValue: "",
-                    onChanged: (value) {},
-                  ),
-                  RadioListTile(
-                    contentPadding: EdgeInsets.zero,
-                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                    title: Text("OpenTopoMap"),
-                    value: "",
-                    groupValue: "",
-                    onChanged: (value) {},
-                  ),
-                  SizedBox(
-                    height: 12.h,
-                  ),
+                  // Text(
+                  //   "Jenis Peta",
+                  //   style: AppTheme.title.copyWith(color: AppColor.superDark),
+                  // ),
+                  // RadioListTile(
+                  //   contentPadding: EdgeInsets.zero,
+                  //   visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                  //   title: Text("OpenStreetMap"),
+                  //   value: "",
+                  //   groupValue: "",
+                  //   onChanged: (value) {},
+                  // ),
+                  // RadioListTile(
+                  //   contentPadding: EdgeInsets.zero,
+                  //   visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                  //   title: Text("OpenTopoMap"),
+                  //   value: "",
+                  //   groupValue: "",
+                  //   onChanged: (value) {},
+                  // ),
+                  // SizedBox(
+                  //   height: 12.h,
+                  // ),
                   ElevatedButton(
                       style: ButtonStyle(
                           minimumSize: WidgetStateProperty.all(

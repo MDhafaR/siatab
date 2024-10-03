@@ -16,22 +16,31 @@ class _SumurRequestState extends State<SumurRequest> {
   final _formKey = GlobalKey<FormState>();
 
   late TextEditingController _nameController;
+  late TextEditingController _kodeIntegrasiController;
   late TextEditingController _latitudeController;
   late TextEditingController _longitudeController;
   late TextEditingController _koordinatController;
   late TextEditingController _manfaatJiwaController;
-  late TextEditingController _manfaatIrigasiController;
+  late TextEditingController _manfaatLuasDaerahController;
   late TextEditingController _debitController;
   late TextEditingController _fungsiSumurController;
   late TextEditingController _kondisiSumurController;
 
   String? _operasi;
+  String? _namaBalai;
+  String? _namaWS;
+  String? _namaDAS;
+  String? _kota;
+  String? _provinsi;
+  String? _kecamatan;
+  String? _kelurahan;
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.sumur?.name);
+    _nameController = TextEditingController(text: widget.sumur?.nama);
+    _kodeIntegrasiController = TextEditingController(text: widget.sumur?.kodeIntegrasi);
     _latitudeController = TextEditingController(
       text: widget.sumur != null
           ? widget.sumur!.koordinat.latitude.toString()
@@ -50,8 +59,8 @@ class _SumurRequestState extends State<SumurRequest> {
     );
     _manfaatJiwaController =
         TextEditingController(text: widget.sumur?.manfaatJiwa);
-    _manfaatIrigasiController =
-        TextEditingController(text: widget.sumur?.manfaatIrigasi);
+    _manfaatLuasDaerahController =
+        TextEditingController(text: widget.sumur?.manfaatLuasDaerah);
     _debitController =
         TextEditingController(text: widget.sumur?.debit.toString());
     _fungsiSumurController =
@@ -161,17 +170,25 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           SizedBox(height: 16.h),
                           CustomFormField(
+                            controller: _kodeIntegrasiController,
                             label: "Kode Integrasi",
                             hintText: "-",
                           ),
                           SizedBox(height: 16.h),
                           CustomFormField(
+                            controller: _nameController,
                             label: "Nama/No Sumur",
                             hintText: "Nama / No Sumur",
                           ),
                           SizedBox(height: 16.h),
                           CustomFormField(
                             controller: _koordinatController,
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
+                            inputFormatter: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9 ,\-.]')),
+                              CoordinateFormatter(),
+                            ],
                             label: "Koordinat",
                             hintText: "Latitude , Longitude",
                             isLoading: _isLoading,
@@ -184,7 +201,7 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           SizedBox(height: 16.h),
                           CustomFormField(
-                            controller: _manfaatIrigasiController,
+                            controller: _manfaatLuasDaerahController,
                             label: "Manfaat Luas Daerah Irigasi",
                             hintText: "Manfaat Luas Daerah Irigasi",
                           ),
@@ -193,6 +210,7 @@ class _SumurRequestState extends State<SumurRequest> {
                             controller: _debitController,
                             label: "Debit",
                             hintText: "Debit",
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
                           ),
                           SizedBox(height: 16.h),
                           CustomFormField(
@@ -201,9 +219,15 @@ class _SumurRequestState extends State<SumurRequest> {
                             hintText: "Kondisi Sumur",
                           ),
                           SizedBox(height: 16.h),
+                          CustomFormField(
+                            controller: _fungsiSumurController,
+                            label: "Fungsi Sumur",
+                            hintText: "Fungsi Sumur",
+                          ),
+                          SizedBox(height: 16.h),
                           CustomDropdownField(
                             label: "Status Operasi",
-                            value: _operasi,
+                            value: widget.sumur?.operasi ?? _operasi,
                             items: ["Operasi", "Tidak Operasi"],
                             onChange: (value) {
                               setState(() {
@@ -225,11 +249,15 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           CustomDropdownField(
                             label: "Nama Balai",
-                            value: _operasi,
-                            items: ["Operasi", "Tidak Operasi"],
+                            value: widget.sumur?.namaBalai ?? _namaBalai,
+                            items: [
+                              "Balai Besar Wilayah Sungai Ciliwung Cisadane",
+                              "Balai Besar Wilayah Sungai Citarum",
+                              "Balai Besar Wilayah Sungai Brantas"
+                            ],
                             onChange: (value) {
                               setState(() {
-                                _operasi = value;
+                                _namaBalai = value;
                               });
                             },
                             hint: "Nama Balai",
@@ -239,11 +267,15 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           CustomDropdownField(
                             label: "Nama WS",
-                            value: _operasi,
-                            items: ["Operasi", "Tidak Operasi"],
+                            value: widget.sumur?.namaWs ?? _namaWS,
+                            items: [
+                              "WS Ciliwung Cisadane",
+                              "WS Citarum",
+                              "WS Brantas"
+                            ],
                             onChange: (value) {
                               setState(() {
-                                _operasi = value;
+                                _namaWS = value;
                               });
                             },
                             hint: "Nama WS",
@@ -253,11 +285,16 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           CustomDropdownField(
                             label: "Nama DAS",
-                            value: _operasi,
-                            items: ["Operasi", "Tidak Operasi"],
+                            value: widget.sumur?.namaDas ?? _namaDAS,
+                            items: [
+                              "DAS Ciliwung",
+                              "DAS Cisadane",
+                              "DAS Citarum",
+                              "DAS Brantas"
+                            ],
                             onChange: (value) {
                               setState(() {
-                                _operasi = value;
+                                _namaDAS = value;
                               });
                             },
                             hint: "Nama DAS",
@@ -267,22 +304,37 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           CustomDropdownField(
                             label: "Kota",
-                            value: _operasi,
-                            items: ["Operasi", "Tidak Operasi"],
+                            value: widget.sumur?.kota ?? _kota,
+                            items: [
+                              "Jakarta",
+                              "Bandung",
+                              "Surabaya",
+                              "Semarang",
+                              "Yogyakarta"
+                            ],
                             onChange: (value) {
                               setState(() {
-                                _operasi = value;
+                                _kota = value;
                               });
                             },
                             hint: "Kota",
                           ),
+                          SizedBox(
+                            height: 16.h,
+                          ),
                           CustomDropdownField(
                             label: "Provinsi",
-                            value: _operasi,
-                            items: ["Operasi", "Tidak Operasi"],
+                            value: widget.sumur?.provinsi ?? _provinsi,
+                            items: [
+                              "DKI Jakarta",
+                              "Jawa Barat",
+                              "Jawa Tengah",
+                              "Jawa Timur",
+                              "DI Yogyakarta"
+                            ],
                             onChange: (value) {
                               setState(() {
-                                _operasi = value;
+                                _provinsi = value;
                               });
                             },
                             hint: "Provinsi",
@@ -292,11 +344,17 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           CustomDropdownField(
                             label: "Kecamatan",
-                            value: _operasi,
-                            items: ["Operasi", "Tidak Operasi"],
+                            value: widget.sumur?.kecamatan ?? _kecamatan,
+                            items: [
+                              "Kampung Melayu",
+                              "Jatinegara",
+                              "Bandung Barat",
+                              "Gubeng",
+                              "Tegal Sari"
+                            ],
                             onChange: (value) {
                               setState(() {
-                                _operasi = value;
+                                _kecamatan = value;
                               });
                             },
                             hint: "Kecamatan",
@@ -306,11 +364,17 @@ class _SumurRequestState extends State<SumurRequest> {
                           ),
                           CustomDropdownField(
                             label: "Kelurahan",
-                            value: _operasi,
-                            items: ["Operasi", "Tidak Operasi"],
+                            value: widget.sumur?.kelurahan ?? _kelurahan,
+                            items: [
+                              "Bidara Cina",
+                              "Kampung Melayu",
+                              "Cibiru",
+                              "Airlangga",
+                              "Kotabaru"
+                            ],
                             onChange: (value) {
                               setState(() {
-                                _operasi = value;
+                                _kelurahan = value;
                               });
                             },
                             hint: "Kelurahan",
@@ -350,7 +414,7 @@ class _SumurRequestState extends State<SumurRequest> {
   }
 
   void _submitData() {
-    _updateLatLong(); // Pastikan latitude dan longitude terupdate dari _koordinatController
+    _updateLatLong();
 
     final latitude = double.tryParse(_latitudeController.text);
     final longitude = double.tryParse(_longitudeController.text);
@@ -365,16 +429,24 @@ class _SumurRequestState extends State<SumurRequest> {
     final koordinat = Koordinat(latitude: latitude, longitude: longitude);
 
     final sumur = Sumur(
-      name: "belum", // Anda mungkin ingin mengubah ini sesuai kebutuhan
+      nama: _nameController.text, // Anda mungkin ingin mengubah ini sesuai kebutuhan
       koordinat: koordinat,
       operasi: _operasi ?? '',
       manfaatJiwa: _manfaatJiwaController.text,
-      manfaatIrigasi: _manfaatIrigasiController.text,
+      manfaatLuasDaerah: _manfaatLuasDaerahController.text,
       kondisiSumur: _kondisiSumurController.text,
       fungsiSumur: _fungsiSumurController.text,
       debit: _debitController.text.isEmpty
           ? 0
           : double.parse(_debitController.text),
+      namaDas: _namaDAS ?? '',
+      kota: _kota ?? '',
+      provinsi: _provinsi ?? '',
+      kecamatan: _kecamatan ?? '',
+      kelurahan: _kelurahan ?? '',
+      kodeIntegrasi: _kodeIntegrasiController.text,
+      namaBalai: _namaBalai ?? '',
+      namaWs: _namaWS ?? '',
     );
 
     if (widget.sumur == null) {
@@ -406,10 +478,11 @@ class _SumurRequestState extends State<SumurRequest> {
     _longitudeController.dispose();
     _koordinatController.removeListener(_updateLatLong);
     _manfaatJiwaController.dispose();
-    _manfaatIrigasiController.dispose();
+    _manfaatLuasDaerahController.dispose();
     _debitController.dispose();
     _fungsiSumurController.dispose();
     _kondisiSumurController.dispose();
+    _kodeIntegrasiController.dispose();
     super.dispose();
   }
 }

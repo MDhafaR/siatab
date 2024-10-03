@@ -144,28 +144,22 @@ class _SumurPageState extends State<SumurPage> {
                       return Center(child: CircularProgressIndicator());
                     } else if (state is SumurLoaded) {
                       if (state.sumurList.isEmpty) {
-                        return Center(child: Text('Tidak ada data'));
+                        return EmptyWidget();
                       }
                       return ListView.builder(
                         itemCount: state.sumurList.length,
                         itemBuilder: (context, index) {
                           final sumur = state.sumurList[index];
                           return SumurCard(
-                            latitude: sumur.koordinat.latitude,
-                            longitude: sumur.koordinat.longitude,
-                            operasi: sumur.operasi,
-                            manfaatJiwa: sumur.manfaatJiwa,
-                            manfaatIrigasi: sumur.manfaatIrigasi,
-                            fungsiSumur: sumur.fungsiSumur,
-                            debit: sumur.debit,
-                            kondisiSumur: sumur.kondisiSumur,
+                            sumur: sumur,
                           );
                         },
                       );
                     } else if (state is SumurError) {
-                      return Center(child: Text('Error: ${state.message}'));
+                      print("error ${state.message}");
+                      return EmptyWidget();
                     }
-                    return Container();
+                    return EmptyWidget();
                   },
                 ),
               ),

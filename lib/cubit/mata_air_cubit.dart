@@ -23,6 +23,7 @@ class MataAirCubit extends Cubit<MataAirState> {
   Future<void> addMataAir(MataAir mataAir) async {
     try {
       await _localDatabase.insertMataAir(mataAir);
+      print("ini po mata air $mataAir");
       await loadMataAir(); // Reload the list after adding
     } catch (e) {
       emit(MataAirError('Failed to add mata air: ${e.toString()}'));

@@ -2,121 +2,132 @@ part of 'widgets.dart';
 
 class MataAirCard extends StatelessWidget {
   const MataAirCard({
-    required this.latitude,
-    required this.longitude,
-    required this.operasi,
-    required this.manfaatJiwa,
-    required this.manfaatIrigasi,
+    required this.mataAir,
     super.key,
   });
 
-  final double latitude;
-  final double longitude;
-  final String operasi;
-  final String manfaatJiwa;
-  final String manfaatIrigasi;
+  final MataAir mataAir;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Get.to(() => MataAirRequest(
-          mataAir: MataAir(name: "belum ada", koordinat: Koordinat(latitude: latitude, longitude: longitude), manfaatJiwa: manfaatJiwa, operasi: operasi, manfaatIrigasi: manfaatIrigasi)
-            ));
-      },
+    return Container(
+      margin: EdgeInsets.only(bottom: 8.h),
+      padding: EdgeInsets.all(22),
+      decoration: BoxDecoration(
+        color: AppColor.white,
+        borderRadius: BorderRadius.circular(14),
+      ),
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.all(22),
-            decoration: BoxDecoration(
-              color: AppColor.white,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: GridView.count(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                childAspectRatio: 2,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Koordinat",
-                        style: AppTheme.caption2.copyWith(color: AppColor.dark),
+          GridView.count(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              childAspectRatio: 2.2,
+              children: [
+                ValueCard(title: "Nama/No mataAir", value: mataAir.nama),
+                ValueCard(
+                    title: "Kode Integrasi", value: mataAir.kodeIntegrasi),
+                ValueCard(title: "Kota", value: mataAir.kota),
+                ValueCard(
+                    title: "Provinsi ${mataAir.provinsi}",
+                    value: "Potensi Bencana"),
+                ValueCard(
+                    title: "Manfaat Jiwa",
+                    value: mataAir.manfaatJiwa.toString()),
+                ValueCard(
+                    title: "Manfaat Luas Daerah Irigasi",
+                    value: mataAir.manfaatLuasDaerah.toString()),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Operasi",
+                        style:
+                            AppTheme.caption2.copyWith(color: AppColor.dark)),
+                    SizedBox(
+                      height: 4.h,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: mataAir.operasi == 'Operasi'
+                              ? AppColor.lightGreen
+                              : AppColor.danger),
+                      child: Text(
+                        mataAir.operasi,
+                        style: AppTheme.semiBold.copyWith(color: mataAir.operasi == 'Operasi'
+                              ? AppColor.green
+                              : AppColor.white),
                       ),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        "$latitude, $longitude",
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Operasi",
-                          style:
-                              AppTheme.caption2.copyWith(color: AppColor.dark)),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: operasi == 'Operasi'
-                                ? AppColor.green
-                                : AppColor.danger),
-                        child: Text(
-                          operasi,
-                          style: AppTheme.semiBold,
-                        ),
-                      )
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Manfaat Jiwa",
-                          style:
-                              AppTheme.caption2.copyWith(color: AppColor.dark)),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        manfaatJiwa,
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Manfaat Luas Daerah Irigasi",
-                          style:
-                              AppTheme.caption2.copyWith(color: AppColor.dark)),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      Text(
-                        manfaatIrigasi,
-                        style: AppTheme.title3.copyWith(color: AppColor.dark),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ]),
-          ),
+                    )
+                  ],
+                ),
+              ]),
+          Divider(),
           SizedBox(
             height: 8.h,
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.to(() => DetailMataAir(mataAir: mataAir));
+                },
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 6.5, horizontal: 12),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: AppColor.primary),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/paper.svg",
+                        width: 18,
+                      ),
+                      SizedBox(
+                        width: 8.w,
+                      ),
+                      Text(
+                        "Detail Data",
+                        style:
+                            AppTheme.caption2.copyWith(color: AppColor.white),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 8.w,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 6.5, horizontal: 12),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: AppColor.green),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      "assets/book_map.svg",
+                      width: 18,
+                    ),
+                    SizedBox(
+                      width: 8.w,
+                    ),
+                    Text(
+                      "Koordinat Lokasi",
+                      style:
+                          AppTheme.caption2.copyWith(color: AppColor.white),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

@@ -94,6 +94,13 @@ class AppTheme {
     letterSpacing: 0.2,
   );
 
+  static TextStyle big = TextStyle(
+    color: AppColor.dark,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.2,
+  );
+
   static TextStyle map = TextStyle(
     color: AppColor.darkLight,
     fontSize: 8.sp,

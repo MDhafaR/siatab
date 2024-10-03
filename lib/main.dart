@@ -18,10 +18,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    LocalDatabase localDatabase = LocalDatabase();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => SumurCubit(LocalDatabase())),
-        BlocProvider(create: (context) => MataAirCubit(LocalDatabase())),
+        BlocProvider(create: (context) => SumurCubit(localDatabase)),
+        BlocProvider(create: (context) => MataAirCubit(localDatabase)),
       ],
       child: ScreenUtilInit(
         child: GetMaterialApp(
